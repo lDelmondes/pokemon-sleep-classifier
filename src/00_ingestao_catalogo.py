@@ -1,23 +1,26 @@
 ﻿"""
-00_ingestao_catalogo.py
-Baixa metadados + URL de imagem das cartas de Pokemon dos sets do MVP
-via API gratuita da TCGdex (sem API key). Faz cache local de cada carta.
+
+Baixa metadados + URL de imagem das cartas de Pokemon dos sets do MVP via API gratuita da TCGdex (sem API key). Faz cache local de cada carta.
+
 """
 import json, time
 from pathlib import Path
 import requests
 import pandas as pd
 
-API = "https://api.tcgdex.net/v2/en"
-CACHE = Path("data/cache_cards"); CACHE.mkdir(parents=True, exist_ok=True)
-Path("data/raw").mkdir(parents=True, exist_ok=True)
+ROOT = Path(__file__).resolve().parent.parent
+CACHE = ROOT / "data" / "cache_cards"
+RAW = ROOT / "data" / "raw"
+CACHE.mkdir(parents=True, exist_ok=True)
+RAW.mkdir(parents=True, exist_ok=True)
 
-def casar_set(nome: str):
-    """Mapeia o nome do set (TCGdex) para o seu codigo de marketplace."""
-    n = nome.lower()
-    if "white flare" in n: return "WHT"
-    if "promos" in n and "scarlet" in n: return "SVP"
-    if n == "151": return "MEW"
+API = "https://api.tcgdex.net/v2/en"
+
+def casar_set(nome: str, sid: str = ""):
+    """Mapeia set para o codigo de marketplace."""
+    if sid == "sv10.5w": return "WHT"
+    if sid == "sv03.5":  return "MEW"
+    if sid == "svp":     return "SVP"
     return None
 
 def get(url):
@@ -25,21 +28,21 @@ def get(url):
     return r.json()
 
 def carta_completa(card_id: str):
-    """Objeto completo da carta, com cache em disco (a TCGdex pede que
-    voce cacheie em vez de rebaixar -- e fica instantaneo nas proximas vezes)."""
+    """Objeto completo da carta, com cache em disco."""
     f = CACHE / f"{card_id}.json"
     if f.exists():
         return json.loads(f.read_text(encoding="utf-8"))
     dados = get(f"{API}/cards/{card_id}")
     f.write_text(json.dumps(dados, ensure_ascii=False), encoding="utf-8")
-    time.sleep(0.1)  # cortesia com uma API gratuita
+    time.sleep(0.1) 
     return dados
 
 def main():
     todos_sets = get(f"{API}/sets")  # lista resumida de TODOS os sets
-    alvos = {s["id"]: casar_set(s["name"]) for s in todos_sets if casar_set(s["name"])}
+    alvos = {s["id"]: casar_set(s["name"], s["id"])
+             for s in todos_sets if casar_set(s["name"], s["id"])}
 
-    print("Sets encontrados (CONFIRA se os IDs estao certos):")
+    print("Sets encontrados:")
     for sid, codigo in alvos.items():
         print(f"  {codigo} -> id TCGdex '{sid}'")
 
@@ -63,8 +66,9 @@ def main():
         print(f"  {codigo}: {n} cartas de Pokemon")
 
     df = pd.DataFrame(linhas)
-    df.to_csv("data/raw/catalogo_mvp.csv", index=False, encoding="utf-8")
-    print(f"\n{len(df)} cartas salvas em data/raw/catalogo_mvp.csv")
+    saida = RAW / "catalogo_mvp.csv"
+    df.to_csv(saida, index=False, encoding="utf-8")
+    print(f"\n{len(df)} cartas salvas em {saida}")
 
 if __name__ == "__main__":
     main()
