@@ -1,0 +1,764 @@
+<!doctype html><meta charset="utf-8">
+    <style>
+      body { font-family: sans-serif; background:#1e1e1e; color:#eee; padding:20px; }
+      .grid { display:flex; flex-wrap:wrap; gap:14px; }
+      .card { background:#2d2d2d; padding:8px; border-radius:8px; width:180px;
+               cursor:pointer; display:block; }
+      .card img { width:100%; border-radius:4px; }
+      .card input { transform:scale(1.6); margin-bottom:6px; }
+      .card input:checked ~ img { outline:3px solid #4ec9b0; }
+      .info { font-size:12px; margin-top:6px; }
+      #bar { position:sticky; top:0; background:#1e1e1e; padding:12px 0;
+              z-index:10; border-bottom:1px solid #444; margin-bottom:14px; }
+      textarea { width:100%; height:80px; background:#111; color:#4ec9b0;
+                  border:1px solid #444; font-family:monospace; }
+      button { font-size:15px; padding:8px 16px; cursor:pointer; }
+    </style>
+    <div id="bar">
+      <h2>Rotulagem: BST &mdash; marque os de OLHOS FECHADOS (146 cartas)</h2>
+      <button onclick="gerar()">Gerar lista de positivos</button>
+      <span id="contador">0 marcados</span>
+      <textarea id="saida" placeholder="A lista de card_id aparece aqui..."></textarea>
+    </div>
+    <div class="grid">
+        <label class="card">
+          <input type="checkbox" value="swsh5-54">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-54.png" loading="lazy"/>
+          <div class="info">Galarian Slowpoke #54<br>dormindo: 0.93</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-104">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-104.png" loading="lazy"/>
+          <div class="info">Bisharp #104<br>dormindo: 0.89</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-12">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-12.png" loading="lazy"/>
+          <div class="info">Spewpa #12<br>dormindo: 0.86</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-17">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-17.png" loading="lazy"/>
+          <div class="info">Blipbug #17<br>dormindo: 0.85</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-75">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-75.png" loading="lazy"/>
+          <div class="info">Conkeldurr #75<br>dormindo: 0.85</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-4">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-4.png" loading="lazy"/>
+          <div class="info">Cacnea #4<br>dormindo: 0.85</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-118">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-118.png" loading="lazy"/>
+          <div class="info">Bouffalant #118<br>dormindo: 0.85</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-47">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-47.png" loading="lazy"/>
+          <div class="info">Luxio #47<br>dormindo: 0.85</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-111">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-111.png" loading="lazy"/>
+          <div class="info">Spearow #111<br>dormindo: 0.84</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-99">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-99.png" loading="lazy"/>
+          <div class="info">Steelix #99<br>dormindo: 0.83</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-49">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-49.png" loading="lazy"/>
+          <div class="info">Pachirisu #49<br>dormindo: 0.82</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-19">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-19.png" loading="lazy"/>
+          <div class="info">Flapple VMAX #19<br>dormindo: 0.79</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-52">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-52.png" loading="lazy"/>
+          <div class="info">Yamper #52<br>dormindo: 0.77</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-164">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-164.png" loading="lazy"/>
+          <div class="info">Flapple VMAX #164<br>dormindo: 0.76</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-46">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-46.png" loading="lazy"/>
+          <div class="info">Shinx #46<br>dormindo: 0.73</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-8">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-8.png" loading="lazy"/>
+          <div class="info">Cherrim #8<br>dormindo: 0.69</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-97">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-97.png" loading="lazy"/>
+          <div class="info">Tyranitar V #97<br>dormindo: 0.68</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-35">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-35.png" loading="lazy"/>
+          <div class="info">Galarian Mr. Rime #35<br>dormindo: 0.68</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-155">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-155.png" loading="lazy"/>
+          <div class="info">Tyranitar V #155<br>dormindo: 0.63</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-24">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-24.png" loading="lazy"/>
+          <div class="info">Pignite #24<br>dormindo: 0.62</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-154">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-154.png" loading="lazy"/>
+          <div class="info">Tyranitar V #154<br>dormindo: 0.62</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-62">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-62.png" loading="lazy"/>
+          <div class="info">Mimikyu V #62<br>dormindo: 0.62</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-31">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-31.png" loading="lazy"/>
+          <div class="info">Horsea #31<br>dormindo: 0.61</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-101">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-101.png" loading="lazy"/>
+          <div class="info">Bronzor #101<br>dormindo: 0.61</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-112">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-112.png" loading="lazy"/>
+          <div class="info">Fearow #112<br>dormindo: 0.60</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-74">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-74.png" loading="lazy"/>
+          <div class="info">Gurdurr #74<br>dormindo: 0.57</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-68">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-68.png" loading="lazy"/>
+          <div class="info">Onix #68<br>dormindo: 0.57</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-65">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-65.png" loading="lazy"/>
+          <div class="info">Orbeetle #65<br>dormindo: 0.54</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-42">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-42.png" loading="lazy"/>
+          <div class="info">Jellicent #42<br>dormindo: 0.53</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-95">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-95.png" loading="lazy"/>
+          <div class="info">Houndour #95<br>dormindo: 0.53</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-29">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-29.png" loading="lazy"/>
+          <div class="info">Sizzlipede #29<br>dormindo: 0.53</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-71">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-71.png" loading="lazy"/>
+          <div class="info">Gligar #71<br>dormindo: 0.51</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-57">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-57.png" loading="lazy"/>
+          <div class="info">Baltoy #57<br>dormindo: 0.51</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-115">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-115.png" loading="lazy"/>
+          <div class="info">Glameow #115<br>dormindo: 0.51</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-87">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-87.png" loading="lazy"/>
+          <div class="info">Rapid Strike Urshifu V #87<br>dormindo: 0.49</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-69">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-69.png" loading="lazy"/>
+          <div class="info">Cubone #69<br>dormindo: 0.48</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-110">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-110.png" loading="lazy"/>
+          <div class="info">Corviknight VMAX #110<br>dormindo: 0.48</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-67">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-67.png" loading="lazy"/>
+          <div class="info">Primeape #67<br>dormindo: 0.48</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-21">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-21.png" loading="lazy"/>
+          <div class="info">Victini V #21<br>dormindo: 0.47</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-147">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-147.png" loading="lazy"/>
+          <div class="info">Tapu Koko V #147<br>dormindo: 0.45</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-2">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-2.png" loading="lazy"/>
+          <div class="info">Weepinbell #2<br>dormindo: 0.45</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-165">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-165.png" loading="lazy"/>
+          <div class="info">Victini VMAX #165<br>dormindo: 0.44</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-7">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-7.png" loading="lazy"/>
+          <div class="info">Cherubi #7<br>dormindo: 0.43</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-146">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-146.png" loading="lazy"/>
+          <div class="info">Empoleon V #146<br>dormindo: 0.42</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-16">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-16.png" loading="lazy"/>
+          <div class="info">Tapu Bulu #16<br>dormindo: 0.41</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-116">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-116.png" loading="lazy"/>
+          <div class="info">Purugly #116<br>dormindo: 0.40</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-82">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-82.png" loading="lazy"/>
+          <div class="info">Sandaconda #82<br>dormindo: 0.39</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-15">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-15.png" loading="lazy"/>
+          <div class="info">Lurantis #15<br>dormindo: 0.39</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-81">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-81.png" loading="lazy"/>
+          <div class="info">Silicobra #81<br>dormindo: 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-38">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-38.png" loading="lazy"/>
+          <div class="info">Corphish #38<br>dormindo: 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-3">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-3.png" loading="lazy"/>
+          <div class="info">Victreebel #3<br>dormindo: 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-76">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-76.png" loading="lazy"/>
+          <div class="info">Mienfoo #76<br>dormindo: 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-50">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-50.png" loading="lazy"/>
+          <div class="info">Tapu Koko V #50<br>dormindo: 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-1">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-1.png" loading="lazy"/>
+          <div class="info">Bellsprout #1<br>dormindo: 0.37</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-100">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-100.png" loading="lazy"/>
+          <div class="info">Mawile #100<br>dormindo: 0.35</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-93">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-93.png" loading="lazy"/>
+          <div class="info">Murkrow #93<br>dormindo: 0.35</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-94">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-94.png" loading="lazy"/>
+          <div class="info">Honchkrow #94<br>dormindo: 0.34</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-23">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-23.png" loading="lazy"/>
+          <div class="info">Tepig #23<br>dormindo: 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-113">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-113.png" loading="lazy"/>
+          <div class="info">Lickitung #113<br>dormindo: 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-26">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-26.png" loading="lazy"/>
+          <div class="info">Heatmor #26<br>dormindo: 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-102">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-102.png" loading="lazy"/>
+          <div class="info">Bronzong #102<br>dormindo: 0.31</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-90">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-90.png" loading="lazy"/>
+          <div class="info">Golbat #90<br>dormindo: 0.31</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-167">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-167.png" loading="lazy"/>
+          <div class="info">Single Strike Urshifu VMAX #167<br>dormindo: 0.31</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-98">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-98.png" loading="lazy"/>
+          <div class="info">Morpeko #98<br>dormindo: 0.30</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-27">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-27.png" loading="lazy"/>
+          <div class="info">Salandit #27<br>dormindo: 0.30</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-45">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-45.png" loading="lazy"/>
+          <div class="info">Electivire #45<br>dormindo: 0.30</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-41">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-41.png" loading="lazy"/>
+          <div class="info">Frillish #41<br>dormindo: 0.29</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-92">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-92.png" loading="lazy"/>
+          <div class="info">Galarian Slowbro #92<br>dormindo: 0.29</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-106">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-106.png" loading="lazy"/>
+          <div class="info">Doublade #106<br>dormindo: 0.28</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-43">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-43.png" loading="lazy"/>
+          <div class="info">Bruxish #43<br>dormindo: 0.27</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-10">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-10.png" loading="lazy"/>
+          <div class="info">Durant #10<br>dormindo: 0.27</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-11">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-11.png" loading="lazy"/>
+          <div class="info">Scatterbug #11<br>dormindo: 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-59">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-59.png" loading="lazy"/>
+          <div class="info">Chimecho #59<br>dormindo: 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-145">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-145.png" loading="lazy"/>
+          <div class="info">Empoleon V #145<br>dormindo: 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-77">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-77.png" loading="lazy"/>
+          <div class="info">Mienshao #77<br>dormindo: 0.25</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-39">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-39.png" loading="lazy"/>
+          <div class="info">Crawdaunt #39<br>dormindo: 0.25</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-83">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-83.png" loading="lazy"/>
+          <div class="info">Falinks #83<br>dormindo: 0.24</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-14">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-14.png" loading="lazy"/>
+          <div class="info">Fomantis #14<br>dormindo: 0.24</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-108">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-108.png" loading="lazy"/>
+          <div class="info">Aegislash #108<br>dormindo: 0.24</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-117">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-117.png" loading="lazy"/>
+          <div class="info">Stoutland V #117<br>dormindo: 0.23</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-171">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-171.png" loading="lazy"/>
+          <div class="info">Corviknight VMAX #171<br>dormindo: 0.23</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-37">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-37.png" loading="lazy"/>
+          <div class="info">Octillery #37<br>dormindo: 0.23</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-53">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-53.png" loading="lazy"/>
+          <div class="info">Boltund #53<br>dormindo: 0.21</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-119">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-119.png" loading="lazy"/>
+          <div class="info">Drampa #119<br>dormindo: 0.21</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-144">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-144.png" loading="lazy"/>
+          <div class="info">Victini V #144<br>dormindo: 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-143">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-143.png" loading="lazy"/>
+          <div class="info">Flapple V #143<br>dormindo: 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-22">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-22.png" loading="lazy"/>
+          <div class="info">Victini VMAX #22<br>dormindo: 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-34">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-34.png" loading="lazy"/>
+          <div class="info">Galarian Mr. Mime #34<br>dormindo: 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-58">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-58.png" loading="lazy"/>
+          <div class="info">Claydol #58<br>dormindo: 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-13">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-13.png" loading="lazy"/>
+          <div class="info">Vivillon #13<br>dormindo: 0.19</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-25">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-25.png" loading="lazy"/>
+          <div class="info">Emboar #25<br>dormindo: 0.19</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-9">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-9.png" loading="lazy"/>
+          <div class="info">Carnivine #9<br>dormindo: 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-114">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-114.png" loading="lazy"/>
+          <div class="info">Lickilicky #114<br>dormindo: 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-5">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-5.png" loading="lazy"/>
+          <div class="info">Cacturne #5<br>dormindo: 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-105">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-105.png" loading="lazy"/>
+          <div class="info">Honedge #105<br>dormindo: 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-120">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-120.png" loading="lazy"/>
+          <div class="info">Indeedee #120<br>dormindo: 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-153">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-153.png" loading="lazy"/>
+          <div class="info">Rapid Strike Urshifu V #153<br>dormindo: 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-152">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-152.png" loading="lazy"/>
+          <div class="info">Rapid Strike Urshifu V #152<br>dormindo: 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-36">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-36.png" loading="lazy"/>
+          <div class="info">Remoraid #36<br>dormindo: 0.17</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-157">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-157.png" loading="lazy"/>
+          <div class="info">Stoutland V #157<br>dormindo: 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-96">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-96.png" loading="lazy"/>
+          <div class="info">Houndoom #96<br>dormindo: 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-64">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-64.png" loading="lazy"/>
+          <div class="info">Dottler #64<br>dormindo: 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-72">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-72.png" loading="lazy"/>
+          <div class="info">Gliscor #72<br>dormindo: 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-168">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-168.png" loading="lazy"/>
+          <div class="info">Single Strike Urshifu VMAX #168<br>dormindo: 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-32">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-32.png" loading="lazy"/>
+          <div class="info">Seadra #32<br>dormindo: 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-86">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-86.png" loading="lazy"/>
+          <div class="info">Single Strike Urshifu VMAX #86<br>dormindo: 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-178">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-178.png" loading="lazy"/>
+          <div class="info">Octillery #178<br>dormindo: 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-78">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-78.png" loading="lazy"/>
+          <div class="info">Rolycoly #78<br>dormindo: 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-61">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-61.png" loading="lazy"/>
+          <div class="info">Meowstic #61<br>dormindo: 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-51">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-51.png" loading="lazy"/>
+          <div class="info">Tapu Koko VMAX #51<br>dormindo: 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-166">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-166.png" loading="lazy"/>
+          <div class="info">Tapu Koko VMAX #166<br>dormindo: 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-150">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-150.png" loading="lazy"/>
+          <div class="info">Single Strike Urshifu V #150<br>dormindo: 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-33">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-33.png" loading="lazy"/>
+          <div class="info">Kingdra #33<br>dormindo: 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-80">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-80.png" loading="lazy"/>
+          <div class="info">Coalossal #80<br>dormindo: 0.12</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-156">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-156.png" loading="lazy"/>
+          <div class="info">Corviknight V #156<br>dormindo: 0.12</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-66">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-66.png" loading="lazy"/>
+          <div class="info">Mankey #66<br>dormindo: 0.12</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-73">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-73.png" loading="lazy"/>
+          <div class="info">Timburr #73<br>dormindo: 0.12</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-20">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-20.png" loading="lazy"/>
+          <div class="info">Entei #20<br>dormindo: 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-18">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-18.png" loading="lazy"/>
+          <div class="info">Flapple V #18<br>dormindo: 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-55">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-55.png" loading="lazy"/>
+          <div class="info">Spoink #55<br>dormindo: 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-70">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-70.png" loading="lazy"/>
+          <div class="info">Marowak #70<br>dormindo: 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-79">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-79.png" loading="lazy"/>
+          <div class="info">Carkol #79<br>dormindo: 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-109">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-109.png" loading="lazy"/>
+          <div class="info">Corviknight V #109<br>dormindo: 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-169">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-169.png" loading="lazy"/>
+          <div class="info">Rapid Strike Urshifu VMAX #169<br>dormindo: 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-44">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-44.png" loading="lazy"/>
+          <div class="info">Electabuzz #44<br>dormindo: 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-63">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-63.png" loading="lazy"/>
+          <div class="info">Necrozma V #63<br>dormindo: 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-84">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-84.png" loading="lazy"/>
+          <div class="info">Stonjourner #84<br>dormindo: 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-148">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-148.png" loading="lazy"/>
+          <div class="info">Mimikyu V #148<br>dormindo: 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-56">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-56.png" loading="lazy"/>
+          <div class="info">Grumpig #56<br>dormindo: 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-40">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-40.png" loading="lazy"/>
+          <div class="info">Empoleon V #40<br>dormindo: 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-28">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-28.png" loading="lazy"/>
+          <div class="info">Salazzle #28<br>dormindo: 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-6">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-6.png" loading="lazy"/>
+          <div class="info">Kricketune V #6<br>dormindo: 0.07</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-60">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-60.png" loading="lazy"/>
+          <div class="info">Espurr #60<br>dormindo: 0.06</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-85">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-85.png" loading="lazy"/>
+          <div class="info">Single Strike Urshifu V #85<br>dormindo: 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-170">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-170.png" loading="lazy"/>
+          <div class="info">Rapid Strike Urshifu VMAX #170<br>dormindo: 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-91">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-91.png" loading="lazy"/>
+          <div class="info">Crobat #91<br>dormindo: 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-89">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-89.png" loading="lazy"/>
+          <div class="info">Zubat #89<br>dormindo: 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-107">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-107.png" loading="lazy"/>
+          <div class="info">Aegislash #107<br>dormindo: 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-149">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-149.png" loading="lazy"/>
+          <div class="info">Necrozma V #149<br>dormindo: 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-88">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-88.png" loading="lazy"/>
+          <div class="info">Rapid Strike Urshifu VMAX #88<br>dormindo: 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-48">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-48.png" loading="lazy"/>
+          <div class="info">Luxray #48<br>dormindo: 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-151">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-151.png" loading="lazy"/>
+          <div class="info">Single Strike Urshifu V #151<br>dormindo: 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-30">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-30.png" loading="lazy"/>
+          <div class="info">Centiskorch #30<br>dormindo: 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-142">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-142.png" loading="lazy"/>
+          <div class="info">Kricketune V #142<br>dormindo: 0.02</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-179">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-179.png" loading="lazy"/>
+          <div class="info">Houndoom #179<br>dormindo: 0.02</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="swsh5-103">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/swsh5-103.png" loading="lazy"/>
+          <div class="info">Pawniard #103<br>dormindo: 0.01</div>
+        </label></div>
+    <script>
+      const boxes = () => [...document.querySelectorAll('input[type=checkbox]')];
+      boxes().forEach(b => b.addEventListener('change', () => {
+        document.getElementById('contador').textContent =
+          boxes().filter(x => x.checked).length + ' marcados';
+      }));
+      function gerar() {
+        const ids = boxes().filter(x => x.checked).map(x => x.value);
+        document.getElementById('saida').value = ids.join('\n');
+      }
+    </script>
