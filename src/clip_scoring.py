@@ -35,7 +35,8 @@ def main():
     model.eval().to(device)
     tokenizer = open_clip.get_tokenizer("ViT-B-32")
 
-    df = pd.read_csv(RAW / "catalogo_com_imagem.csv")
+    df = pd.read_csv(RAW / "catalogo_completo.csv")
+    df = df[df["image_url"].notna()].reset_index(drop=True)
     total = len(df)
 
     # Pre-codifica os textos de cada teste uma vez so (nao mudam entre imagens)
