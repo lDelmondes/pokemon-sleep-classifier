@@ -1,7 +1,11 @@
 """
 
-Constroi o gabarito dos positivos (Pokemon de olhos fechados) a partir da lista (set, numero), resolve o card_id cruzando com o catalogo, e separa quais positivos tem imagem (entram na avaliacao do CLIP) dos que nao tem (revisao manual). 
-Saida: data/labels/positivos.csv
+Consolida o gabarito de positivos (olhos fechados) a partir de uma fonte unica:
+data/labels/positivos_ids.csv  (um card_id por linha, os 44 rotulados a mao)
+
+Valida cada id contra o catalogo completo, marca se tem imagem, e salva o gabarito final. Avisa ids inexistentes (typos de transcricao).
+
+Saida: data/labels/gabarito.csv
 
 """
 from pathlib import Path
@@ -10,49 +14,31 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
 LABELS = ROOT / "data" / "labels"
-LABELS.mkdir(parents=True, exist_ok=True)
-
-# Positivos confirmados: (set_codigo, numero).
-POSITIVOS = [
-    ("WHT", "141"), ("WHT", "105"), ("WHT", "112"), ("WHT", "091"),
-    ("WHT", "096"), ("WHT", "028"), ("WHT", "119"), ("WHT", "036"),
-    ("SVP", "014"), ("SVP", "022"), ("SVP", "041"), ("SVP", "051"),
-    ("SVP", "122"), ("SVP", "173"), ("SVP", "189"),
-    ("MEW", "013"), ("MEW", "063"), ("MEW", "086"), ("MEW", "166"),
-]
 
 def main():
-    full = pd.read_csv(RAW / "catalogo_mvp.csv", dtype={"numero": str})
-    com_img = pd.read_csv(RAW / "catalogo_com_imagem.csv", dtype={"numero": str})
-    ids_com_img = set(com_img["card_id"])
+    cat = pd.read_csv(RAW / "catalogo_completo.csv")
+    com_img = set(cat.loc[cat["image_url"].notna(), "card_id"])
 
-    linhas, nao_encontrados = [], []
-    for set_cod, numero in POSITIVOS:
-        match = full[(full["set_codigo"] == set_cod) & (full["numero"] == numero)]
-        if match.empty:
-            nao_encontrados.append((set_cod, numero))
-            continue
-        r = match.iloc[0]
-        linhas.append({
-            "card_id": r["card_id"],
-            "set_codigo": set_cod,
-            "numero": numero,
-            "nome": r["nome"],
-            "tem_imagem": r["card_id"] in ids_com_img,
-        })
+    # Fonte unica de positivos: uma coluna card_id
+    ids = set(pd.read_csv(LABELS / "positivos_ids.csv")["card_id"])
 
-    gab = pd.DataFrame(linhas)
-    gab.to_csv(LABELS / "positivos.csv", index=False, encoding="utf-8")
+    cat_ids = set(cat["card_id"])
+    inexistentes = sorted(ids - cat_ids)
+    validos = sorted(ids & cat_ids)
 
-    n_total = len(gab)
-    n_img = int(gab["tem_imagem"].sum())
-    print(f"Positivos resolvidos: {n_total}/{len(POSITIVOS)}")
-    print(f"  Com imagem (entram na avaliacao do CLIP): {n_img}")
-    print(f"  Sem imagem (revisao manual, fora do recall): {n_total - n_img}")
-    if nao_encontrados:
-        print(f"\n  NAO ENCONTRADOS no catalogo (investigar): {nao_encontrados}")
-    print(f"\nGabarito salvo em {LABELS / 'positivos.csv'}")
-    print(gab.to_string(index=False))
+    gab = cat[cat["card_id"].isin(validos)][
+        ["card_id", "set_codigo", "era", "numero", "nome"]].copy()
+    gab["tem_imagem"] = gab["card_id"].isin(com_img)
+    gab.to_csv(LABELS / "gabarito.csv", index=False, encoding="utf-8")
+
+    print(f"Positivos unicos informados: {len(ids)}")
+    print(f"  Validos (existem no catalogo): {len(validos)}")
+    print(f"  Com imagem (entram no treino): {int(gab['tem_imagem'].sum())}")
+    if inexistentes:
+        print(f"  INEXISTENTES no catalogo (investigar): {inexistentes}")
+    print(f"\nDistribuicao por set:")
+    print(gab.groupby(["era", "set_codigo"]).size().to_string())
+    print(f"\nGabarito salvo em {LABELS / 'gabarito.csv'}")
 
 if __name__ == "__main__":
     main()

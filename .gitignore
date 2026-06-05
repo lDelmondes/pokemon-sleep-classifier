@@ -5,3 +5,11 @@ __pycache__/
 .vscode/
 data/cache_cards/
 data/images/
+
+# Derivados regeneraveis (reconstruidos pelos scripts)
+data/raw/catalogo_completo.csv
+data/raw/scores_clip.csv
+data/labels/gabarito.csv
+
+# A fonte de rotulagem e SEMPRE versionada (trabalho humano insubstituivel)
+!data/labels/positivos_ids.csv
