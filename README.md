@@ -6,7 +6,7 @@ coleção temática. Produto de dados com humano no loop: o modelo gera candidat
 a revisão humana confirma.
 
 ## Contexto do problema
-Triar manualmente +15.000 cartas do TCG é inviável. Este projeto usa o embedding
+Realizar uma triagem manual de +15.000 cartas do TCG é inviável. Este projeto usa o embedding
 do CLIP como extrator de features e um classificador treinado sobre os rótulos
 para ranquear cartas por probabilidade de "olhos fechados", priorizando **recall**
 (não perder nenhuma carta) sobre precision.
