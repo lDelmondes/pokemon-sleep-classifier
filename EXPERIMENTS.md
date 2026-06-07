@@ -83,16 +83,22 @@ RTX 2060 (6GB).
   (2) trocar o backbone por um melhor em detalhes finos (SigLIP2), que pode
   ter no embedding o sinal que o CLIP descartava.
 
-## Experimento 5 — SigLIP2 como backbone (em andamento)
+## Experimento 5 — SigLIP2 como backbone
 
 - **Hipótese:** o SigLIP2 (treinado para "features densas" e localização)
   preserva o detalhe local "olhos fechados" que o CLIP ViT-B-32 descartava.
-- **Setup:** reextrair embeddings com `ViT-B-16-SigLIP2` (gratuito, cabe na
-  2060) e re-rodar a logística stratified 5-fold para comparar com o Exp. 2.
-- **Resultado:** _(a preencher)_
-- **Diagnóstico:** _(a preencher)_
-- **Decisão:** _(a preencher)_
-
+- **Setup:** embeddings com `ViT-B-16-SigLIP2` (768 dims, vs 512 do CLIP) +
+  mesma regressão logística stratified 5-fold do Exp. 2 (comparação justa).
+- **Resultado:** PR-AUC subiu de 0,206 (CLIP) para **0,273** (SigLIP2).
+  Precision no top-20 quase dobrou (30% → 55%). "K para recall 100%" caiu de
+  1132/1257 (90%) para **730/1257 (58%)**.
+- **Diagnóstico:** a troca de backbone melhorou de forma clara — confirma que
+  parte do gargalo ERA a representação (o CLIP descartava o sinal). Mas o recall
+  ainda é insuficiente (48% no top-100): a fome de dados continua sendo o outro
+  gargalo. As duas frentes (modelo + dados) são complementares, não excludentes.
+- **Decisão:** manter o SigLIP2 como backbone e atacar a segunda frente —
+  rotular mais cartas para dar à logística/fine-tuning material suficiente.
+  
 ---
 
 ## Aprendizados transversais

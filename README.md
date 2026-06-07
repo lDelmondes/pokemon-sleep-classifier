@@ -34,12 +34,15 @@ Cada passo com hipótese, métrica e decisão registradas em
 
 | Caminho | Papel |
 |---|---|
-| `src/tcgdex_utils.py` | Acesso à API (módulo compartilhado) |
+| `src/tcgdex_utils.py` | Acesso à API TCGdex (módulo compartilhado) |
 | `src/ingestao.py` | Baixa catálogo + imagens dos sets |
 | `src/montar_gabarito.py` | Consolida os rótulos manuais |
-| `src/extrair_embeddings*.py` | Extrai embeddings (CLIP / SigLIP2) |
-| `src/treinar*.py` | Treino (logística / fine-tuning) |
-| `src/avaliar.py` | Métricas (recall/precision por top-K) |
+| `src/folha_rotulagem.py` | Gera HTML para rotular positivos de um set |
+| `src/extrair_embeddings_siglip.py` | Extrai embeddings com SigLIP2 |
+| `src/avaliar_embeddings.py` | Treina logística + mede recall/precision (5-fold) |
+| `src/dataset.py`, `split.py`, `modelo.py`, `treinar_finetuning.py` | Peças do fine-tuning |
+| `src/diagnosticos/` | Scripts exploratórios pontuais |
+| `src/arquivo/` | Abordagens anteriores (CLIP zero-shot, embeddings do CLIP) — preservadas como registro da jornada documentada em [EXPERIMENTS.md](EXPERIMENTS.md) |
 | `data/labels/positivos_ids.csv` | Os rótulos manuais (fonte do projeto) |
 
 ## Como rodar
