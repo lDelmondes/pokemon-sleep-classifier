@@ -13,3 +13,9 @@ data/labels/gabarito.csv
 
 # A fonte de rotulagem e SEMPRE versionada (trabalho humano insubstituivel)
 !data/labels/positivos_ids.csv
+
+# Modelos treinados (artefatos pesados, regeneraveis pelo treino)
+data/modelos/
+
+# Modelos treinados (artefatos pesados, regeneraveis pelo treino)
+data/modelos/
