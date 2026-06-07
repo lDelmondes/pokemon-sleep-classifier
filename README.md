@@ -1,42 +1,60 @@
-﻿# pokemon-sleep-classifier
+﻿# Classificador de Pokémons dormindo
 
-Classificador de imagens para identificar cartas de Pokémon TCG onde o Pokémon
-está de **olhos fechados**, com o objetivo de montar a lista de compras de uma
-coleção temática. Produto de dados com humano no loop: o modelo gera candidatos,
-a revisão humana confirma.
+Um produto de dados para um problema real: minha namorada coleciona cartas de
+Pokémon TCG onde o Pokémon aparece de **dormindo**. Triar +15.000 cartas
+à mão é inviável — então construí um classificador de imagens para rankear
+candidatos e montar a lista de compras da coleção.
 
-## Contexto do problema
-Realizar uma triagem manual de +15.000 cartas do TCG é inviável. Este projeto usa o embedding
-do CLIP como extrator de features e um classificador treinado sobre os rótulos
-para ranquear cartas por probabilidade de "olhos fechados", priorizando **recall**
-(não perder nenhuma carta) sobre precision.
+> Cada abordagem testada, o porquê de cada falha, o diagnóstico e a mudança de
+> rota estão documentados em **[EXPERIMENTS.md](EXPERIMENTS.md)**
 
-## Dados
-- Fonte: API gratuita da [TCGdex](https://tcgdex.dev) (sem chave).
-- 7 sets ingeridos (~1.285 cartas de Pokémon): WHT, SVP, MEW, SCR, TEF, PAL (era SV)
-  e BST (era SWSH).
-- Gabarito de positivos rotulado à mão em `data/labels/`.
+## O problema, em termos de produto
 
-## Estrutura
-- `src/tcgdex_utils.py` — módulo compartilhado de acesso à API (sem execução direta).
-- `src/ingestao.py` — baixa catálogo + imagens dos sets definidos no dicionário `SETS`.
-- `src/clip_scoring.py` — baseline zero-shot: pontua cada imagem contra prompts.
-- `src/montar_gabarito.py` — resolve os positivos (set, número) -> card_id.
-- `src/avaliar.py` — mede recall/precision por top-K contra o gabarito.
-- `src/folha_revisao.py` — gera HTML para revisão humana de rótulos.
-- `src/diagnosticos/` — scripts exploratórios pontuais.
+- **Objetivo:** não perder nenhuma carta da coleção → métrica-norte é **recall**.
+- **Humano no loop:** o modelo rankeia candidatos, a revisão humana confirma —
+  então tolera-se precisão menor em troca de cobertura.
+- **Restrições:** custo zero, treino local em GPU
+  de consumo (RTX 2060, 6GB).
 
-## Ordem de execução
-1. `python src/ingestao.py` — popula `data/raw/catalogo_completo.csv` e `data/images/`.
-2. `python src/montar_gabarito.py` — gera `data/labels/positivos.csv`.
-3. `python src/clip_scoring.py` — gera `data/raw/scores_clip.csv`.
-4. `python src/avaliar.py` — imprime as métricas.
+## A jornada, em uma frase
 
-## Setup
+CLIP zero-shot → embeddings + regressão logística → fine-tuning (2 e 1 blocos)
+→ diagnóstico de fome de dados → mudança de backbone (SigLIP2) + mais dados.
+Cada passo com hipótese, métrica e decisão registradas em
+[EXPERIMENTS.md](EXPERIMENTS.md).
+
+## Stack técnica
+
+- **Dados:** API gratuita da [TCGdex](https://tcgdex.dev) (sem chave)
+- **Visão:** open_clip (CLIP ViT-B-32 → SigLIP2), PyTorch (GPU/CUDA)
+- **ML clássico:** scikit-learn (regressão logística, validação cruzada)
+- **Manipulação:** pandas, numpy
+
+## Estrutura do repositório
+
+| Caminho | Papel |
+|---|---|
+| `src/tcgdex_utils.py` | Acesso à API (módulo compartilhado) |
+| `src/ingestao.py` | Baixa catálogo + imagens dos sets |
+| `src/montar_gabarito.py` | Consolida os rótulos manuais |
+| `src/extrair_embeddings*.py` | Extrai embeddings (CLIP / SigLIP2) |
+| `src/treinar*.py` | Treino (logística / fine-tuning) |
+| `src/avaliar.py` | Métricas (recall/precision por top-K) |
+| `data/labels/positivos_ids.csv` | Os rótulos manuais (fonte do projeto) |
+
+## Como rodar
+
     python -m venv .venv
     .venv\Scripts\activate
     pip install -r requirements.txt
+    python src/ingestao.py          # popula catálogo e imagens
 
-## Status
-Baseline CLIP zero-shot avaliado (recall insuficiente em arte estilizada).
-Em desenvolvimento: classificador sobre embeddings do CLIP com validação cruzada.
+> Nota sobre GPU: o `requirements.txt` fixa a build CUDA do PyTorch. Para rodar
+> em CPU, instale o torch com `--index-url https://download.pytorch.org/whl/cpu`.
+
+## Status atual
+
+🚧 **Em progresso.** Baseline (CLIP zero-shot e embeddings+logística) avaliado e
+diagnosticado como insuficiente por limite de representação e fome de dados.
+Em andamento: troca para SigLIP2 e expansão da base rotulada. Veja o
+[EXPERIMENTS.md](EXPERIMENTS.md) para o estado detalhado.
