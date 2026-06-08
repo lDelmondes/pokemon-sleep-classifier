@@ -167,7 +167,19 @@ valem mais que mais dados inconsistentes; a definição do alvo é viva, refinad
 à luz da evidência. Limitação registrada: cartas com múltiplos Pokémon (só
 alguns positivos) são ambíguas para um classificador de imagem única.
 
-- **Decisão:** _(a preencher após o teste de 3 blocos)_
+**Decisão:** 2 blocos adotado como config de referência (top-80 recall 89%,
+fundo val época 4). Comparado contra 3 blocos no Exp. 8.
+
+### Exp. 8 — Fine-tuning SigLIP2, 3 blocos, gabarito limpo (117 pos)
+- **Hipótese:** mais capacidade descongelada melhora (se 2 blocos eram pouca
+  capacidade) OU overfitta mais cedo (se o gargalo é dado).
+- **Resultado:** fundo do val na época 2 (vs época 4 com 2 blocos); top-80 recall
+  83%, top-10 28%/50%. Sem ganho acima do ruído (teste com só 18 positivos;
+  diferenças de 1–2 positivos).
+- **Conclusão:** capacidade extra não ajudou e antecipou o overfitting. Segundo
+  desempate (após Exp. 3–4) apontando **fome de dados** como gargalo, não
+  capacidade. 3 blocos descartado; 2 blocos mantido. Próxima alavanca: mais dados.
+  
 ---
 
 ## Aprendizados transversais

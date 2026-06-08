@@ -95,7 +95,7 @@ def main():
     device = "cuda"
     print(f"Treinando em: {device}")
 
-    modelo, preprocess = construir_modelo(blocos_descongelados=2)
+    modelo, preprocess = construir_modelo(blocos_descongelados=3)
     modelo.to(device)
 
     df = carregar_dados_rotulados()
