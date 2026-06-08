@@ -1,0 +1,1064 @@
+<!doctype html><meta charset="utf-8">
+    <style>
+      body { font-family: sans-serif; background:#1e1e1e; color:#eee; padding:20px; }
+      .grid { display:flex; flex-wrap:wrap; gap:14px; }
+      .card { background:#2d2d2d; padding:8px; border-radius:8px; width:170px; cursor:pointer; display:block; }
+      .card img { width:100%; border-radius:4px; }
+      .card input { transform:scale(1.5); margin-bottom:6px; }
+      .card input:checked ~ img { outline:3px solid #4ec9b0; }
+      .info { font-size:12px; margin-top:6px; }
+      #bar { position:sticky; top:0; background:#1e1e1e; padding:12px 0; z-index:10; border-bottom:1px solid #444; margin-bottom:14px; }
+      textarea { width:100%; height:70px; background:#111; color:#4ec9b0; border:1px solid #444; font-family:monospace; }
+      button { font-size:15px; padding:8px 16px; cursor:pointer; }
+    </style>
+    <div id="bar">
+      <h2>Rotulagem: SSP &mdash; marque os de OLHOS FECHADOS (207 cartas)</h2>
+      <button onclick="gerar()">Gerar lista</button>
+      <span id="c">0 marcados</span>
+      <textarea id="saida" placeholder="card_id dos positivos aparece aqui..."></textarea>
+    </div>
+    <div class="grid">
+        <label class="card">
+          <input type="checkbox" value="sv08-212">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-212.png" loading="lazy"/>
+          <div class="info">Slakoth #212<br>score 0.86</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-108">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-108.png" loading="lazy"/>
+          <div class="info">Drilbur #108<br>score 0.79</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-157">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-157.png" loading="lazy"/>
+          <div class="info">Tandemaus #157<br>score 0.77</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-145">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-145.png" loading="lazy"/>
+          <div class="info">Slakoth #145<br>score 0.76</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-208">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-208.png" loading="lazy"/>
+          <div class="info">Alolan Dugtrio #208<br>score 0.73</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-152">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-152.png" loading="lazy"/>
+          <div class="info">Rufflet #152<br>score 0.71</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-148">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-148.png" loading="lazy"/>
+          <div class="info">Swablu #148<br>score 0.69</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-198">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-198.png" loading="lazy"/>
+          <div class="info">Feebas #198<br>score 0.69</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-144">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-144.png" loading="lazy"/>
+          <div class="info">Snorlax #144<br>score 0.68</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-013">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-013.png" loading="lazy"/>
+          <div class="info">Rellor #013<br>score 0.65</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-122">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-122.png" loading="lazy"/>
+          <div class="info">Alolan Diglett #122<br>score 0.60</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-043">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-043.png" loading="lazy"/>
+          <div class="info">Spheal #043<br>score 0.60</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-123">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-123.png" loading="lazy"/>
+          <div class="info">Alolan Dugtrio #123<br>score 0.59</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-102">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-102.png" loading="lazy"/>
+          <div class="info">Phanpy #102<br>score 0.58</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-207">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-207.png" loading="lazy"/>
+          <div class="info">Clobbopus #207<br>score 0.57</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-044">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-044.png" loading="lazy"/>
+          <div class="info">Sealeo #044<br>score 0.56</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-104">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-104.png" loading="lazy"/>
+          <div class="info">Trapinch #104<br>score 0.56</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-003">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-003.png" loading="lazy"/>
+          <div class="info">Exeggutor #003<br>score 0.55</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-120">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-120.png" loading="lazy"/>
+          <div class="info">Shroodle #120<br>score 0.55</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-070">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-070.png" loading="lazy"/>
+          <div class="info">Togepi #070<br>score 0.54</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-041">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-041.png" loading="lazy"/>
+          <div class="info">Feebas #041<br>score 0.53</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-200">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-200.png" loading="lazy"/>
+          <div class="info">Bruxish #200<br>score 0.53</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-205">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-205.png" loading="lazy"/>
+          <div class="info">Phanpy #205<br>score 0.53</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-199">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-199.png" loading="lazy"/>
+          <div class="info">Spheal #199<br>score 0.52</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-090">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-090.png" loading="lazy"/>
+          <div class="info">Sandygast #090<br>score 0.51</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-213">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-213.png" loading="lazy"/>
+          <div class="info">Kecleon #213<br>score 0.50</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-210">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-210.png" loading="lazy"/>
+          <div class="info">Flapple #210<br>score 0.48</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-196">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-196.png" loading="lazy"/>
+          <div class="info">Larvesta #196<br>score 0.46</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-103">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-103.png" loading="lazy"/>
+          <div class="info">Donphan #103<br>score 0.46</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-112">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-112.png" loading="lazy"/>
+          <div class="info">Clobbopus #112<br>score 0.46</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-211">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-211.png" loading="lazy"/>
+          <div class="info">Appletun #211<br>score 0.45</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-008">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-008.png" loading="lazy"/>
+          <div class="info">Morelull #008<br>score 0.45</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-046">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-046.png" loading="lazy"/>
+          <div class="info">Shellos #046<br>score 0.45</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-143">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-143.png" loading="lazy"/>
+          <div class="info">Eevee #143<br>score 0.44</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-154">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-154.png" loading="lazy"/>
+          <div class="info">Helioptile #154<br>score 0.44</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-073">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-073.png" loading="lazy"/>
+          <div class="info">Marill #073<br>score 0.43</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-005">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-005.png" loading="lazy"/>
+          <div class="info">Scatterbug #005<br>score 0.43</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-202">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-202.png" loading="lazy"/>
+          <div class="info">Stunfisk #202<br>score 0.43</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-194">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-194.png" loading="lazy"/>
+          <div class="info">Shiinotic #194<br>score 0.43</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-016">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-016.png" loading="lazy"/>
+          <div class="info">Vulpix #016<br>score 0.42</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-064">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-064.png" loading="lazy"/>
+          <div class="info">Stunfisk #064<br>score 0.41</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-002">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-002.png" loading="lazy"/>
+          <div class="info">Exeggcute #002<br>score 0.41</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-092">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-092.png" loading="lazy"/>
+          <div class="info">Tapu Lele #092<br>score 0.40</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-138">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-138.png" loading="lazy"/>
+          <div class="info">Applin #138<br>score 0.39</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-140">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-140.png" loading="lazy"/>
+          <div class="info">Appletun #140<br>score 0.39</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-009">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-009.png" loading="lazy"/>
+          <div class="info">Shiinotic #009<br>score 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-093">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-093.png" loading="lazy"/>
+          <div class="info">Indeedee #093<br>score 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-150">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-150.png" loading="lazy"/>
+          <div class="info">Kecleon #150<br>score 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-006">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-006.png" loading="lazy"/>
+          <div class="info">Spewpa #006<br>score 0.38</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-158">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-158.png" loading="lazy"/>
+          <div class="info">Maushold #158<br>score 0.37</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-049">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-049.png" loading="lazy"/>
+          <div class="info">Bruxish #049<br>score 0.37</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-117">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-117.png" loading="lazy"/>
+          <div class="info">Deino #117<br>score 0.36</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-094">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-094.png" loading="lazy"/>
+          <div class="info">Flittle #094<br>score 0.36</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-084">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-084.png" loading="lazy"/>
+          <div class="info">Espurr #084<br>score 0.35</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-078">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-078.png" loading="lazy"/>
+          <div class="info">Uxie #078<br>score 0.35</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-080">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-080.png" loading="lazy"/>
+          <div class="info">Azelf #080<br>score 0.35</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-082">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-082.png" loading="lazy"/>
+          <div class="info">Yamask #082<br>score 0.35</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-201">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-201.png" loading="lazy"/>
+          <div class="info">Cetitan #201<br>score 0.34</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-014">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-014.png" loading="lazy"/>
+          <div class="info">Rabsca #014<br>score 0.34</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-121">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-121.png" loading="lazy"/>
+          <div class="info">Grafaiai #121<br>score 0.34</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-151">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-151.png" loading="lazy"/>
+          <div class="info">Bouffalant #151<br>score 0.33</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-204">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-204.png" loading="lazy"/>
+          <div class="info">Mesprit #204<br>score 0.33</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-156">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-156.png" loading="lazy"/>
+          <div class="info">Oranguru #156<br>score 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-128">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-128.png" loading="lazy"/>
+          <div class="info">Klefki #128<br>score 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-071">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-071.png" loading="lazy"/>
+          <div class="info">Togetic #071<br>score 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-139">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-139.png" loading="lazy"/>
+          <div class="info">Flapple #139<br>score 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-085">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-085.png" loading="lazy"/>
+          <div class="info">Meowstic #085<br>score 0.32</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-206">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-206.png" loading="lazy"/>
+          <div class="info">Vibrava #206<br>score 0.31</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-193">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-193.png" loading="lazy"/>
+          <div class="info">Vivillon #193<br>score 0.31</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-022">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-022.png" loading="lazy"/>
+          <div class="info">Pansear #022<br>score 0.30</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-221">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-221.png" loading="lazy"/>
+          <div class="info">Palossand ex #221<br>score 0.30</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-107">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-107.png" loading="lazy"/>
+          <div class="info">Gastrodon #107<br>score 0.29</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-238">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-238.png" loading="lazy"/>
+          <div class="info">Pikachu ex #238<br>score 0.29</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-072">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-072.png" loading="lazy"/>
+          <div class="info">Togekiss #072<br>score 0.28</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-074">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-074.png" loading="lazy"/>
+          <div class="info">Azumarill #074<br>score 0.28</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-242">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-242.png" loading="lazy"/>
+          <div class="info">Alolan Exeggutor ex #242<br>score 0.28</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-129">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-129.png" loading="lazy"/>
+          <div class="info">Duraludon #129<br>score 0.28</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-010">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-010.png" loading="lazy"/>
+          <div class="info">Dhelmise #010<br>score 0.27</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-001">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-001.png" loading="lazy"/>
+          <div class="info">Exeggcute #001<br>score 0.27</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-040">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-040.png" loading="lazy"/>
+          <div class="info">Mantine #040<br>score 0.27</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-136">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-136.png" loading="lazy"/>
+          <div class="info">Palkia #136<br>score 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-029">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-029.png" loading="lazy"/>
+          <div class="info">Fuecoco #029<br>score 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-081">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-081.png" loading="lazy"/>
+          <div class="info">Sigilyph #081<br>score 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-007">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-007.png" loading="lazy"/>
+          <div class="info">Vivillon #007<br>score 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-247">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-247.png" loading="lazy"/>
+          <div class="info">Pikachu ex #247<br>score 0.26</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-089">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-089.png" loading="lazy"/>
+          <div class="info">Oricorio #089<br>score 0.25</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-039">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-039.png" loading="lazy"/>
+          <div class="info">Paldean Tauros #039<br>score 0.25</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-227">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-227.png" loading="lazy"/>
+          <div class="info">Slaking ex #227<br>score 0.25</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-077">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-077.png" loading="lazy"/>
+          <div class="info">Latios #077<br>score 0.25</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-236">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-236.png" loading="lazy"/>
+          <div class="info">Durant ex #236<br>score 0.25</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-051">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-051.png" loading="lazy"/>
+          <div class="info">Quaxwell #051<br>score 0.24</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-219">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-219.png" loading="lazy"/>
+          <div class="info">Pikachu ex #219<br>score 0.24</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-098">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-098.png" loading="lazy"/>
+          <div class="info">Mankey #098<br>score 0.24</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-105">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-105.png" loading="lazy"/>
+          <div class="info">Vibrava #105<br>score 0.24</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-147">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-147.png" loading="lazy"/>
+          <div class="info">Slaking ex #147<br>score 0.23</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-111">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-111.png" loading="lazy"/>
+          <div class="info">Passimian #111<br>score 0.23</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-131">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-131.png" loading="lazy"/>
+          <div class="info">Gholdengo #131<br>score 0.22</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-011">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-011.png" loading="lazy"/>
+          <div class="info">Zarude #011<br>score 0.22</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-053">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-053.png" loading="lazy"/>
+          <div class="info">Cetoddle #053<br>score 0.22</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-099">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-099.png" loading="lazy"/>
+          <div class="info">Primeape #099<br>score 0.22</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-075">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-075.png" loading="lazy"/>
+          <div class="info">Smoochum #075<br>score 0.22</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-226">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-226.png" loading="lazy"/>
+          <div class="info">Tatsugiri ex #226<br>score 0.21</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-137">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-137.png" loading="lazy"/>
+          <div class="info">Turtonator #137<br>score 0.21</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-146">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-146.png" loading="lazy"/>
+          <div class="info">Vigoroth #146<br>score 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-095">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-095.png" loading="lazy"/>
+          <div class="info">Espathra #095<br>score 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-027">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-027.png" loading="lazy"/>
+          <div class="info">Sizzlipede #027<br>score 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-045">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-045.png" loading="lazy"/>
+          <div class="info">Walrein #045<br>score 0.20</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-101">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-101.png" loading="lazy"/>
+          <div class="info">Paldean Tauros #101<br>score 0.19</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-203">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-203.png" loading="lazy"/>
+          <div class="info">Latios #203<br>score 0.19</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-195">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-195.png" loading="lazy"/>
+          <div class="info">Castform Sunny Form #195<br>score 0.19</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-012">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-012.png" loading="lazy"/>
+          <div class="info">Capsakid #012<br>score 0.19</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-066">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-066.png" loading="lazy"/>
+          <div class="info">Wattrel #066<br>score 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-214">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-214.png" loading="lazy"/>
+          <div class="info">Braviary #214<br>score 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-100">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-100.png" loading="lazy"/>
+          <div class="info">Annihilape #100<br>score 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-004">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-004.png" loading="lazy"/>
+          <div class="info">Durant ex #004<br>score 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-020">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-020.png" loading="lazy"/>
+          <div class="info">Castform Sunny Form #020<br>score 0.18</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-192">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-192.png" loading="lazy"/>
+          <div class="info">Exeggcute #192<br>score 0.17</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-030">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-030.png" loading="lazy"/>
+          <div class="info">Crocalor #030<br>score 0.17</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-018">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-018.png" loading="lazy"/>
+          <div class="info">Paldean Tauros #018<br>score 0.17</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-241">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-241.png" loading="lazy"/>
+          <div class="info">Archaludon ex #241<br>score 0.17</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-237">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-237.png" loading="lazy"/>
+          <div class="info">Milotic ex #237<br>score 0.17</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-133">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-133.png" loading="lazy"/>
+          <div class="info">Alolan Exeggutor ex #133<br>score 0.17</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-126">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-126.png" loading="lazy"/>
+          <div class="info">Bronzor #126<br>score 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-248">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-248.png" loading="lazy"/>
+          <div class="info">Alolan Exeggutor ex #248<br>score 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-091">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-091.png" loading="lazy"/>
+          <div class="info">Palossand ex #091<br>score 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-209">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-209.png" loading="lazy"/>
+          <div class="info">Skarmory #209<br>score 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-052">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-052.png" loading="lazy"/>
+          <div class="info">Quaquaval #052<br>score 0.16</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-161">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-161.png" loading="lazy"/>
+          <div class="info">Terapagos #161<br>score 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-062">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-062.png" loading="lazy"/>
+          <div class="info">Blitzle #062<br>score 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-225">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-225.png" loading="lazy"/>
+          <div class="info">Alolan Exeggutor ex #225<br>score 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-015">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-015.png" loading="lazy"/>
+          <div class="info">Wo-Chien #015<br>score 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-026">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-026.png" loading="lazy"/>
+          <div class="info">Oricorio #026<br>score 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-228">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-228.png" loading="lazy"/>
+          <div class="info">Cyclizar ex #228<br>score 0.15</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-115">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-115.png" loading="lazy"/>
+          <div class="info">Glimmora #115<br>score 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-021">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-021.png" loading="lazy"/>
+          <div class="info">Victini #021<br>score 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-079">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-079.png" loading="lazy"/>
+          <div class="info">Mesprit #079<br>score 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-055">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-055.png" loading="lazy"/>
+          <div class="info">Iron Bundle #055<br>score 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-050">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-050.png" loading="lazy"/>
+          <div class="info">Quaxly #050<br>score 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-087">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-087.png" loading="lazy"/>
+          <div class="info">Dedenne #087<br>score 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-056">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-056.png" loading="lazy"/>
+          <div class="info">Chien-Pao #056<br>score 0.14</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-155">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-155.png" loading="lazy"/>
+          <div class="info">Heliolisk #155<br>score 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-057">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-057.png" loading="lazy"/>
+          <div class="info">Pikachu ex #057<br>score 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-125">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-125.png" loading="lazy"/>
+          <div class="info">Registeel #125<br>score 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-058">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-058.png" loading="lazy"/>
+          <div class="info">Magnemite #058<br>score 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-097">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-097.png" loading="lazy"/>
+          <div class="info">Gimmighoul #097<br>score 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-197">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-197.png" loading="lazy"/>
+          <div class="info">Ceruledge #197<br>score 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-017">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-017.png" loading="lazy"/>
+          <div class="info">Ninetales #017<br>score 0.13</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-149">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-149.png" loading="lazy"/>
+          <div class="info">Zangoose #149<br>score 0.12</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-113">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-113.png" loading="lazy"/>
+          <div class="info">Grapploct #113<br>score 0.12</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-063">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-063.png" loading="lazy"/>
+          <div class="info">Zebstrika #063<br>score 0.12</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-114">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-114.png" loading="lazy"/>
+          <div class="info">Glimmet #114<br>score 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-083">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-083.png" loading="lazy"/>
+          <div class="info">Cofagrigus #083<br>score 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-223">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-223.png" loading="lazy"/>
+          <div class="info">Hydreigon ex #223<br>score 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-135">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-135.png" loading="lazy"/>
+          <div class="info">Dialga #135<br>score 0.11</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-023">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-023.png" loading="lazy"/>
+          <div class="info">Simisear #023<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-239">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-239.png" loading="lazy"/>
+          <div class="info">Latias ex #239<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-109">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-109.png" loading="lazy"/>
+          <div class="info">Excadrill #109<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-134">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-134.png" loading="lazy"/>
+          <div class="info">Altaria #134<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-024">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-024.png" loading="lazy"/>
+          <div class="info">Larvesta #024<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-216">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-216.png" loading="lazy"/>
+          <div class="info">Scovillain ex #216<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-215">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-215.png" loading="lazy"/>
+          <div class="info">Durant ex #215<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-065">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-065.png" loading="lazy"/>
+          <div class="info">Tapu Koko #065<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-032">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-032.png" loading="lazy"/>
+          <div class="info">Charcadet #032<br>score 0.10</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-031">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-031.png" loading="lazy"/>
+          <div class="info">Skeledirge #031<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-060">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-060.png" loading="lazy"/>
+          <div class="info">Magnezone #060<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-110">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-110.png" loading="lazy"/>
+          <div class="info">Landorus #110<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-124">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-124.png" loading="lazy"/>
+          <div class="info">Skarmory #124<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-127">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-127.png" loading="lazy"/>
+          <div class="info">Bronzong #127<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-025">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-025.png" loading="lazy"/>
+          <div class="info">Volcarona #025<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-054">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-054.png" loading="lazy"/>
+          <div class="info">Cetitan #054<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-028">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-028.png" loading="lazy"/>
+          <div class="info">Centiskorch #028<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-061">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-061.png" loading="lazy"/>
+          <div class="info">Rotom #061<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-059">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-059.png" loading="lazy"/>
+          <div class="info">Magneton #059<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-118">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-118.png" loading="lazy"/>
+          <div class="info">Zweilous #118<br>score 0.09</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-220">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-220.png" loading="lazy"/>
+          <div class="info">Latias ex #220<br>score 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-224">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-224.png" loading="lazy"/>
+          <div class="info">Archaludon ex #224<br>score 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-088">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-088.png" loading="lazy"/>
+          <div class="info">Xerneas #088<br>score 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-096">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-096.png" loading="lazy"/>
+          <div class="info">Flutter Mane #096<br>score 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-119">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-119.png" loading="lazy"/>
+          <div class="info">Hydreigon ex #119<br>score 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-067">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-067.png" loading="lazy"/>
+          <div class="info">Kilowattrel #067<br>score 0.08</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-035">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-035.png" loading="lazy"/>
+          <div class="info">Ceruledge #035<br>score 0.07</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-076">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-076.png" loading="lazy"/>
+          <div class="info">Latias ex #076<br>score 0.07</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-153">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-153.png" loading="lazy"/>
+          <div class="info">Braviary #153<br>score 0.07</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-142">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-142.png" loading="lazy"/>
+          <div class="info">Tatsugiri ex #142<br>score 0.07</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-042">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-042.png" loading="lazy"/>
+          <div class="info">Milotic ex #042<br>score 0.07</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-019">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-019.png" loading="lazy"/>
+          <div class="info">Ho-Oh #019<br>score 0.07</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-217">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-217.png" loading="lazy"/>
+          <div class="info">Milotic ex #217<br>score 0.06</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-047">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-047.png" loading="lazy"/>
+          <div class="info">Cryogonal #047<br>score 0.06</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-222">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-222.png" loading="lazy"/>
+          <div class="info">Flygon ex #222<br>score 0.06</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-036">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-036.png" loading="lazy"/>
+          <div class="info">Ceruledge ex #036<br>score 0.06</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-159">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-159.png" loading="lazy"/>
+          <div class="info">Cyclizar ex #159<br>score 0.06</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-033">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-033.png" loading="lazy"/>
+          <div class="info">Charcadet #033<br>score 0.06</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-034">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-034.png" loading="lazy"/>
+          <div class="info">Armarouge #034<br>score 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-141">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-141.png" loading="lazy"/>
+          <div class="info">Eternatus #141<br>score 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-160">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-160.png" loading="lazy"/>
+          <div class="info">Flamigo ex #160<br>score 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-130">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-130.png" loading="lazy"/>
+          <div class="info">Archaludon ex #130<br>score 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-132">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-132.png" loading="lazy"/>
+          <div class="info">Iron Crown #132<br>score 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-116">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-116.png" loading="lazy"/>
+          <div class="info">Koraidon #116<br>score 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-037">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-037.png" loading="lazy"/>
+          <div class="info">Scovillain ex #037<br>score 0.05</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-240">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-240.png" loading="lazy"/>
+          <div class="info">Hydreigon ex #240<br>score 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-068">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-068.png" loading="lazy"/>
+          <div class="info">Kilowattrel ex #068<br>score 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-086">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-086.png" loading="lazy"/>
+          <div class="info">Sylveon ex #086<br>score 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-048">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-048.png" loading="lazy"/>
+          <div class="info">Black Kyurem ex #048<br>score 0.04</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-106">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-106.png" loading="lazy"/>
+          <div class="info">Flygon ex #106<br>score 0.03</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-218">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-218.png" loading="lazy"/>
+          <div class="info">Black Kyurem ex #218<br>score 0.03</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-069">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-069.png" loading="lazy"/>
+          <div class="info">Miraidon #069<br>score 0.03</div>
+        </label>
+        <label class="card">
+          <input type="checkbox" value="sv08-038">
+          <img src="file:///C:/Users/lucas/Documents/pokemon-sleep-classifier/data/images/sv08-038.png" loading="lazy"/>
+          <div class="info">Gouging Fire #038<br>score 0.03</div>
+        </label></div>
+    <script>
+      const bs = () => [...document.querySelectorAll('input[type=checkbox]')];
+      bs().forEach(b => b.addEventListener('change', () => {
+        document.getElementById('c').textContent = bs().filter(x=>x.checked).length + ' marcados';
+      }));
+      function gerar() {
+        document.getElementById('saida').value = bs().filter(x=>x.checked).map(x=>x.value).join('\n');
+      }
+    </script>
