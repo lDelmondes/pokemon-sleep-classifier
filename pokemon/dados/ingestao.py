@@ -3,15 +3,10 @@
 Ingestao generalizada de varios sets. Usa tcgdex_utils para falar com a API.
 
 """
-from pathlib import Path
 import pandas as pd
-from tcgdex_utils import cartas_do_set, carta_completa, montar_url_imagem, baixar_imagem
+from pokemon.dados.tcgdex_utils import cartas_do_set, carta_completa, montar_url_imagem, baixar_imagem
+from pokemon.caminhos import RAW, IMAGES
 
-ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
-IMAGES = ROOT / "data" / "images"
-RAW.mkdir(parents=True, exist_ok=True)
-IMAGES.mkdir(parents=True, exist_ok=True)
 
 SETS = {
     # --- Scarlet & Violet (SV) ---

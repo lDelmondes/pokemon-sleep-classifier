@@ -5,15 +5,12 @@ Define o Dataset de cartas: le um PNG do disco, aplica transformacoes (pre-proce
 Modulo importado pelo script de treino; nao roda sozinho.
 
 """
-from pathlib import Path
+from pokemon.caminhos import IMAGES
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
 from PIL import Image
-
-ROOT = Path(__file__).resolve().parent.parent
-IMAGES = ROOT / "data" / "images"
 
 # Medias e desvios que o CLIP espera (padrao do pre-treino).
 # Normalizar com esses valores poe a imagem na escala que a rede reconhece.

@@ -5,13 +5,11 @@ Importado pelos scripts de ingestao -- uma fonte da verdade, sem duplicacao.
 
 """
 import json, time
-from pathlib import Path
+from pathlib import Path 
+from pokemon.caminhos import CACHE
 import requests
 
 API = "https://api.tcgdex.net/v2/en"
-ROOT = Path(__file__).resolve().parent.parent
-CACHE = ROOT / "data" / "cache_cards"
-CACHE.mkdir(parents=True, exist_ok=True)
 
 def get(url):
     """GET simples com timeout (conexao, leitura) e erro explicito."""

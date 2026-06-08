@@ -1,22 +1,15 @@
 """
-avaliar_embeddings.py
 
 Treina regressao logistica sobre embeddings (CLIP ou SigLIP) e mede recall/precision honestos com stratified 5-fold. Recebe qual .npz usar via argumento.
-Uso:
-  python src/avaliar_embeddings.py embeddings.npz          # CLIP
-  python src/avaliar_embeddings.py embeddings_siglip.npz   # SigLIP2
+
 """
 import sys
-from pathlib import Path
+from pokemon.caminhos import RAW, LABELS
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 from sklearn.metrics import average_precision_score
-
-ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
-LABELS = ROOT / "data" / "labels"
 
 def main():
     # qual arquivo de embeddings usar (default: o do SigLIP)

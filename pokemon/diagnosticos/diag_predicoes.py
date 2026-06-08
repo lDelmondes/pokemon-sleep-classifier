@@ -1,9 +1,6 @@
-from pathlib import Path
+from pokemon.caminhos import RAW, LABELS
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-RAW = ROOT / "data" / "raw"
-LABELS = ROOT / "data" / "labels"
 
 pred = pd.read_csv(RAW / "predicoes.csv")
 cat = pd.read_csv(RAW / "catalogo_completo.csv")

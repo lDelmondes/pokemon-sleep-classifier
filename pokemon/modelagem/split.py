@@ -5,13 +5,9 @@ Divide as cartas em treino/validacao/teste de forma ESTRATIFICADA (mantendo a pr
 Modulo importado pelo script de treino.
 
 """
-from pathlib import Path
+from pokemon.caminhos import RAW, LABELS
 import pandas as pd
 from sklearn.model_selection import train_test_split
-
-ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
-LABELS = ROOT / "data" / "labels"
 
 def carregar_dados_rotulados():
     """Monta um DataFrame com card_id + label (1=positivo) para as cartas

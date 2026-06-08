@@ -8,7 +8,7 @@ Fine-tuning do SigLIP2 para "olhos fechados". Reaproveita split.py e dataset.py,
 Saida: data/modelos/melhor_siglip.pt + metricas no teste.
 
 """
-from pathlib import Path
+from pokemon.caminhos import IMAGES, MODELOS
 import numpy as np
 import torch
 import torch.nn as nn
@@ -16,13 +16,8 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from PIL import Image
 
-from split import carregar_dados_rotulados, dividir
-from modelo_siglip import construir_modelo
-
-ROOT = Path(__file__).resolve().parent.parent
-IMAGES = ROOT / "data" / "images"
-MODELOS = ROOT / "data" / "modelos"
-MODELOS.mkdir(parents=True, exist_ok=True)
+from pokemon.modelagem.split import carregar_dados_rotulados, dividir
+from pokemon.modelagem.modelo_siglip import construir_modelo
 
 EPOCAS_MAX = 50
 PACIENCIA = 7
@@ -95,7 +90,7 @@ def main():
     device = "cuda"
     print(f"Treinando em: {device}")
 
-    modelo, preprocess = construir_modelo(blocos_descongelados=3)
+    modelo, preprocess = construir_modelo(blocos_descongelados=2)
     modelo.to(device)
 
     df = carregar_dados_rotulados()

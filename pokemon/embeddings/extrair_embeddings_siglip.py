@@ -5,16 +5,12 @@ Semelhante ao extrair_embeddings.py, mas usando SigLIP2 (melhor em detalhes fino
 Saida: data/raw/embeddings_siglip.npz
 
 """
-from pathlib import Path
+from pokemon.caminhos import RAW, IMAGES
 import numpy as np
 import pandas as pd
 import torch
 import open_clip
 from PIL import Image
-
-ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
-IMAGES = ROOT / "data" / "images"
 
 def main():
     device = "cuda"   # agora temos GPU

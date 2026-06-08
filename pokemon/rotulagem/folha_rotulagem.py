@@ -7,17 +7,11 @@ Marca os positivos no checkbox e o botao gera a lista de card_id para colar.
 Edite SETS_PARA_ROTULAR e rode uma vez para gerar todas.
 
 """
-from pathlib import Path
+from pokemon.caminhos import RAW, IMAGES, LABELS
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
-
-ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
-IMAGES = ROOT / "data" / "images"
-LABELS = ROOT / "data" / "labels"
-LABELS.mkdir(parents=True, exist_ok=True)
 
 # Sets novos a rotular nesta rodada
 SETS_PARA_ROTULAR = ["SVI", "TWM", "SSP", "EVS", "BRS", "LOR", "CRZ"]

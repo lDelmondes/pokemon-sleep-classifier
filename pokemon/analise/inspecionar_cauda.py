@@ -5,20 +5,14 @@ Carrega o modelo SigLIP fine-tunado, pontua TODAS as cartas, e gera um HTML com 
 Objetivo: entender a cauda dificil e flagrar possiveis erros de rotulo.
 
 """
-from pathlib import Path
+from pokemon.caminhos import RAW, IMAGES, LABELS, MODELOS
 import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 
-from modelo_siglip import construir_modelo
-
-ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
-IMAGES = ROOT / "data" / "images"
-LABELS = ROOT / "data" / "labels"
-MODELOS = ROOT / "data" / "modelos"
+from pokemon.modelagem.modelo_siglip import construir_modelo
 
 N_PIORES = 15   # quantos dos piores positivos mostrar
 

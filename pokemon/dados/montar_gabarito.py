@@ -8,12 +8,8 @@ Valida cada id contra o catalogo completo, marca se tem imagem, e salva o gabari
 Saida: data/labels/gabarito.csv
 
 """
-from pathlib import Path
+from pokemon.caminhos import RAW, LABELS
 import pandas as pd
-
-ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
-LABELS = ROOT / "data" / "labels"
 
 def main():
     cat = pd.read_csv(RAW / "catalogo_completo.csv")
