@@ -128,7 +128,46 @@ RTX 2060 (6GB).
   presentes: dados suficientes (98 positivos no treino vs. 30) e uma
   representação melhor. Se a logística sobre embeddings congelados está no
   teto, ajustar os pesos do backbone é o caminho para capturar a cauda difícil
-  
+
+## Experimento 7 — Fine-tuning sobre SigLIP2 (122 positivos)
+
+- **Hipótese:** com as duas condições finalmente presentes (representação do
+  SigLIP2 + 122 positivos), o fine-tuning teria material para capturar a cauda
+  difícil que a logística não pegava.
+- **Setup:** fine-tuning do `ViT-B-16-SigLIP2`, 2 blocos + norm + attn_pool +
+  cabeça binária descongelados. BCEWithLogitsLoss com pos_weight≈20, Adam
+  lr=1e-5, early stopping, split estratificado (86 pos treino / 18 val / 18 teste).
+- **Resultado:** a curva treino/validação melhorou qualitativamente — o fundo
+  da validação migrou da época 2 (fine-tunings anteriores) para a **época 4**,
+  caindo de forma consistente antes de descolar. No teste: top-50 captura
+  **78%** dos positivos, top-80 captura **89%**. Primeiro modelo genuinamente
+  útil do projeto — uma triagem que corta ~80% do trabalho mantendo a maioria
+  dos positivos.
+- **Diagnóstico:** o fine-tuning "pegou" — confirma que as duas frentes (dados
+  + representação) eram ambas necessárias. Ainda há overfitting residual (a
+  validação dispara após a época 4), sinal de que mais dados levaria o ganho
+  além. A cauda 100% continua cara (revisar 175/392 para pegar todos os 18).
+
+### Iteração de qualidade de dados (inspeção da cauda)
+
+A inspeção visual dos positivos pior rankeados pelo modelo virou uma auditoria
+do gabarito e revelou três tipos de erro:
+- **Rótulos errados (removidos):** Kirlia (olho fechado era de um humano, não
+  do Pokémon) e Solrock (marcado pela pose, não tinha olho fechado).
+- **Definição de alvo refinada:** os Hisuian Growlithe tinham o olho *coberto
+  pelo pelo* (não-visível ≠ fechado). Nova sub-regra: "olho visivelmente
+  fechado de um Pokémon" — olho coberto/suposto não conta. Removidos os 3.
+- **Cauda irredutível (mantida):** Zeraora VMAX (quem dorme é um Pachirisu
+  minúsculo em cima), Applin e Clefairy (múltiplos Pokémon, só alguns de olho
+  fechado), Oranguru/Dracozolt rainbow (full-art estilizada). Positivos
+  legítimos que definem o teto do que o modelo consegue.
+
+Gabarito limpo de 122 → **117 positivos**. Aprendizado: menos dados corretos
+valem mais que mais dados inconsistentes; a definição do alvo é viva, refinada
+à luz da evidência. Limitação registrada: cartas com múltiplos Pokémon (só
+alguns positivos) são ambíguas para um classificador de imagem única.
+
+- **Decisão:** _(a preencher após o teste de 3 blocos)_
 ---
 
 ## Aprendizados transversais
