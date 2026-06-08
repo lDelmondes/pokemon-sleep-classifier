@@ -1,21 +1,35 @@
-﻿.venv/
+﻿# --- Ambiente / editor ---
+.venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .vscode/
+
+# --- Caches e imagens (volumosos, regeneraveis) ---
 data/cache_cards/
 data/images/
 
-# Derivados regeneraveis (reconstruidos pelos scripts)
+# --- Derivados pesados, por extensao (nunca versionar) ---
+*.npz          # embeddings
+*.pt           # modelos treinados
+*.pkl
+
+# --- Derivados em CSV (reconstruidos pelos scripts) ---
 data/raw/catalogo_completo.csv
 data/raw/scores_clip.csv
+data/raw/predicoes.csv
 data/labels/gabarito.csv
+data/labels/sem_imagem_revisar.csv
 
-# A fonte de rotulagem e SEMPRE versionada (trabalho humano insubstituivel)
+# --- Folhas de rotulagem (HTML gerado) ---
+data/labels/*.html
+
+# --- Modelos treinados ---
+data/modelos/
+
+# --- EXCECOES: fontes insubstituiveis, SEMPRE versionadas ---
 !data/labels/positivos_ids.csv
-
-# Modelos treinados (artefatos pesados, regeneraveis pelo treino)
-data/modelos/
-
-# Modelos treinados (artefatos pesados, regeneraveis pelo treino)
-data/modelos/
+!data/labels/positivos_ids_backup.csv
+!data/raw/.gitkeep
+!data/labels/.gitkeep
+!notebooks/.gitkeep

@@ -14,20 +14,41 @@ RAW.mkdir(parents=True, exist_ok=True)
 IMAGES.mkdir(parents=True, exist_ok=True)
 
 SETS = {
-    "sv10.5w": ("WHT", "SV"),
-    "svp":     ("SVP", "SV"),
-    "sv03.5":  ("MEW", "SV"),
-    "sv07":    ("SCR", "SV"),
-    "sv05":    ("TEF", "SV"),
-    "sv02":    ("PAL", "SV"),
-    "swsh5":   ("BST", "SWSH"),
-    "sv01":     ("SVI", "SV"),
-    "sv06":     ("TWM", "SV"),
-    "sv08":     ("SSP", "SV"),
-    "swsh7":    ("EVS", "SWSH"),
-    "swsh9":    ("BRS", "SWSH"),
-    "swsh11":   ("LOR", "SWSH"),
-    "swsh12.5": ("CRZ", "SWSH"),
+    # --- Scarlet & Violet (SV) ---
+    "sv01":     ("SVI", "SV"),   # Scarlet & Violet Base Set  
+    "sv02":     ("PAL", "SV"),   # Paldea Envolved
+    "sv03.5":   ("MEW", "SV"),   # Pokémon 151
+    "sv05":     ("TEF", "SV"),   # Temporal Forces
+    "sv06":     ("TWM", "SV"),   # Twilight Masquerade
+    "sv07":     ("SCR", "SV"),   # Stellar Crown
+    "sv08":     ("SSP", "SV"),   # Surging Sparks
+    "sv10.5w":  ("WHT", "SV"),   # White Flare
+    "svp":      ("SVP", "SV"),   # Scarlet & Violet Promos
+    # --- Sword & Shield (SWSH) ---
+    "swsh5":    ("BST", "SWSH"), # Battle Styles
+    "swsh7":    ("EVS", "SWSH"), # Evolving Skies
+    "swsh9":    ("BRS", "SWSH"), # Brilliant Stars
+    "swsh11":   ("LOR", "SWSH"), # Lost Origin
+    "swsh12.5": ("CRZ", "SWSH"), # Crown Zenith
+    # --- Sun & Moon (SM) ---
+    "sm3.5":    ("SLG", "SM"),   # Shining Legends
+    "sm10":     ("UNB", "SM"),   # Unbroken Bonds
+    "sm11":     ("UNM", "SM"),   # Unified Minds
+    "sm115":    ("HIF", "SM"),   # Hidden Fates
+    "sma":      ("HFV", "SM"),   # Hidden Fates Shiny Vault (codigo custom; subset do sm115)
+    "sm12":     ("CEC", "SM"),   # Cosmic Eclipse
+    # --- XY ---
+    "xy2":      ("FLF", "XY"),   # Flashfire
+    "xy6":      ("ROS", "XY"),   # Roaring Skies
+    "xy7":      ("AOR", "XY"),   # Ancient Origins
+    "xy8":      ("BKT", "XY"),   # BREAKthrough
+    "xy11":     ("STS", "XY"),   # Steam Siege
+    # --- Black & White (BW) ---
+    "bw3":      ("NVI", "BW"),   # Noble Victories
+    "bw4":      ("NXD", "BW"),   # Next Destinies
+    "bw7":      ("BCR", "BW"),   # Boundaries Crossed
+    "bw9":      ("PLF", "BW"),   # Plasma Freeze
+    "bw10":     ("PLB", "BW"),   # Plasma Blast
 }
 
 def main():
