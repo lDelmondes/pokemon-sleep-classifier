@@ -98,6 +98,36 @@ RTX 2060 (6GB).
   gargalo. As duas frentes (modelo + dados) são complementares, não excludentes.
 - **Decisão:** manter o SigLIP2 como backbone e atacar a segunda frente —
   rotular mais cartas para dar à logística/fine-tuning material suficiente.
+
+## Experimento 6 — Mais dados (44 → 122 positivos) sobre SigLIP2
+
+- **Hipótese:** o diagnóstico de falta de dados (Exp. 3-4) indicava que mais
+  positivos destravariam o desempenho. Combinado com a melhor representação do
+  SigLIP2 (Exp. 5), as duas frentes deveriam se somar.
+- **Setup:** rotulagem manual de 7 sets novos (Scarlet & Violet, Twilight
+  Masquerade, Surging Sparks, Evolving Skies, Brilliant Stars, Lost Origin,
+  Crown Zenith), cobertura total por set. Base saltou de 44 para 122 positivos
+  (2.611 cartas, prevalência ~4,7%). Distribuição de era equilibrada (64 SV /
+  45 SWSH, contra 3 SWSH antes). Mesma logística stratified 5-fold sobre
+  embeddings SigLIP2.
+- **Resultado:** PR-AUC 0,273 → **0,291** (leve alta). Precision no topo subiu
+  forte: top-20 de 55% → **70%**, top-44 de 32% → **48%**. Porém o recall na
+  cauda continuou fraco (top-100 captura ~30% dos 122 positivos), e o "K para
+  recall 100%" é de 1959/2611 (frágil a outliers — um único positivo difícil
+  no fundo dispara a métrica).
+- **Diagnóstico:** mais dados ajudou, mas MENOS que o esperado. O ganho
+  concentrou-se na precisão do topo (o modelo confia mais e erra menos nos
+  casos que já acertava), não na cauda de positivos difíceis. Hipótese: a
+  logística sobre embeddings CONGELADOS está perto do teto — o sinal "olhos
+  fechados" em arte muito estilizada pode não ser linearmente separável no
+  embedding, e mais exemplos não ensinam o que a representação não capta.
+  Importante: a comparação direta de recall/K com experimentos anteriores é
+  enganosa, pois o número de positivos e o tamanho do catálogo mudaram.
+- **Decisão:** testar fine-tuning sobre o SigLIP2. As duas condições que
+  faltaram no fine-tuning anterior (Exp. 3-4, que overfittou) estão agora
+  presentes: dados suficientes (98 positivos no treino vs. 30) e uma
+  representação melhor. Se a logística sobre embeddings congelados está no
+  teto, ajustar os pesos do backbone é o caminho para capturar a cauda difícil
   
 ---
 
