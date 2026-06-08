@@ -4,7 +4,8 @@ import requests
 API = "https://api.tcgdex.net/v2/en"
 sets = requests.get(f"{API}/sets", timeout=30).json()
 
-alvos = ["stellar crown", "temporal forces", "paldea evolved", "battle styles"]
+alvos = ["scarlet & violet", "surging sparks", "twilight masquerade",
+         "crown zenith", "evolving skies", "lost origin", "brilliant stars"]
 
 for s in sets:
     n = s["name"].lower()

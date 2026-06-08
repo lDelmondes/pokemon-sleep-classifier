@@ -1,7 +1,7 @@
-﻿# Classificador de Pokémons dormindo
+﻿# Classificador de Pokémons Dormindo
 
 Um produto de dados para um problema real: minha namorada coleciona cartas de
-Pokémon TCG onde o Pokémon aparece de **dormindo**. Triar +15.000 cartas
+Pokémon TCG onde o Pokémon esteja **dormindo**. Triar +15.000 cartas
 à mão é inviável — então construí um classificador de imagens para rankear
 candidatos e montar a lista de compras da coleção.
 
@@ -57,7 +57,7 @@ Cada passo com hipótese, métrica e decisão registradas em
 
 ## Status atual
 
-🚧 **Em progresso.** Baseline (CLIP zero-shot e embeddings+logística) avaliado e
+**Em progresso.** Baseline (CLIP zero-shot e embeddings+logística) avaliado e
 diagnosticado como insuficiente por limite de representação e fome de dados.
 Em andamento: troca para SigLIP2 e expansão da base rotulada. Veja o
 [EXPERIMENTS.md](EXPERIMENTS.md) para o estado detalhado.

@@ -21,6 +21,13 @@ SETS = {
     "sv05":    ("TEF", "SV"),
     "sv02":    ("PAL", "SV"),
     "swsh5":   ("BST", "SWSH"),
+    "sv01":     ("SVI", "SV"),
+    "sv06":     ("TWM", "SV"),
+    "sv08":     ("SSP", "SV"),
+    "swsh7":    ("EVS", "SWSH"),
+    "swsh9":    ("BRS", "SWSH"),
+    "swsh11":   ("LOR", "SWSH"),
+    "swsh12.5": ("CRZ", "SWSH"),
 }
 
 def main():
