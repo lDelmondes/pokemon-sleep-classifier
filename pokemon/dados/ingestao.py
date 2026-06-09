@@ -26,7 +26,7 @@ SETS = {
     "swsh11":   ("LOR", "SWSH"), # Lost Origin
     "swsh12.5": ("CRZ", "SWSH"), # Crown Zenith
     # --- Sun & Moon (SM) ---
-    "sm3.5":    ("SLG", "SM"),   # Shining Legends
+    "sm6":      ("FLI", "SM"),   # Forbidden Light
     "sm10":     ("UNB", "SM"),   # Unbroken Bonds
     "sm11":     ("UNM", "SM"),   # Unified Minds
     "sm115":    ("HIF", "SM"),   # Hidden Fates

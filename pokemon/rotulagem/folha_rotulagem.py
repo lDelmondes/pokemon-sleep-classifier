@@ -14,7 +14,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
 # Sets novos a rotular nesta rodada
-SETS_PARA_ROTULAR = ["SVI", "TWM", "SSP", "EVS", "BRS", "LOR", "CRZ"]
+SETS_PARA_ROTULAR = [
+    # Sun & Moon
+    "UNB", "UNM", "HIF", "HFV", "CEC", "FLI",
+    # XY
+    "FLF", "ROS", "AOR", "BKT", "STS",
+    # Black & White
+    "NVI", "NXD", "BCR", "PLF", "PLB",
+]
 
 def calcular_scores():
     """Treina a logistica SigLIP em cima do que JA temos rotulado e gera
