@@ -179,7 +179,18 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
 - **Conclusão:** capacidade extra não ajudou e antecipou o overfitting. Segundo
   desempate (após Exp. 3–4) apontando **fome de dados** como gargalo, não
   capacidade. 3 blocos descartado; 2 blocos mantido. Próxima alavanca: mais dados.
-  
+
+### Exp. 9 — Fine-tuning SigLIP2, 2 blocos, gabarito ampliado (212 pos)
+- **Mudanca:** rotulados 16 sets novos (B&W ate SM, 5 eras), gabarito 117 -> 212.
+- **Hipotese:** se o gargalo era fome de dados (Exp. 3-4, 7-8), ~2x positivos
+  eleva o teto (PR-AUC).
+- **Resultado:** PR-AUC TESTE = 0.615 (vs 0.291 da logistica/122 do Exp. 6 — 2x+).
+  Teste: 32 pos em 680 cartas. Top-10 precision 80%, top-80 recall 78%.
+  Curva: fundo val epoca 2, overfitting mais contido que Exp. 8 (val max 1.74 vs 2.5+).
+- **Conclusao:** hipotese da fome de dados CONFIRMADA. Mais dados foi a alavanca,
+  nao capacidade nem backbone. Curva ainda overfitta -> fome residual, teto nao
+  saturado. Recall@K nao comparavel a rodadas anteriores (teste mudou de tamanho);
+  PR-AUC e a metrica de comparacao valida daqui pra frente.
 ---
 
 ## Aprendizados transversais

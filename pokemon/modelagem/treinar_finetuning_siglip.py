@@ -15,6 +15,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from PIL import Image
+from sklearn.metrics import average_precision_score
 
 from pokemon.modelagem.split import carregar_dados_rotulados, dividir
 from pokemon.modelagem.modelo_siglip import construir_modelo
@@ -79,6 +80,8 @@ def avaliar_teste(modelo, loader, device, P):
     y_ord = y[ordem]
     Pt = int(y.sum())
     print(f"\n=== TESTE: {len(y)} cartas, {Pt} positivos ===")
+    pr_auc = average_precision_score(y, probs)
+    print(f"  PR-AUC (average precision): {pr_auc:.3f}")
     print(f"  K  | recall | precision")
     for K in [10, 20, 30, 50, 80]:
         vp = int(y_ord[:K].sum())
