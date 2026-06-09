@@ -113,7 +113,7 @@ def main():
     loss_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
 
     params = [p for p in modelo.parameters() if p.requires_grad]
-    otimizador = torch.optim.Adam(params, lr=LEARNING_RATE)
+    otimizador = torch.optim.AdamW(params, lr=LEARNING_RATE, weight_decay=0.01)
 
     melhor_val = float("inf")
     sem_melhora = 0

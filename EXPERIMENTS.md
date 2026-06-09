@@ -191,6 +191,16 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   nao capacidade nem backbone. Curva ainda overfitta -> fome residual, teto nao
   saturado. Recall@K nao comparavel a rodadas anteriores (teste mudou de tamanho);
   PR-AUC e a metrica de comparacao valida daqui pra frente.
+
+  ### Exp. 10 — Fine-tuning SigLIP2, 2 blocos, 212 pos + weight decay 0.01 (AdamW)
+- **Hipotese:** L2 contem o overfitting do Exp. 9; se ajudar, PR-AUC sobe (>=0.66).
+- **Resultado:** PR-AUC TESTE = 0.581 (vs 0.615 do Exp. 9). Fundo val epoca 3
+  (vs 2), overfitting marginalmente mais tarde mas PR-AUC nao melhorou — piorou
+  levemente. Top-K nao comparavel (ruido, 32 pos no teste).
+- **Conclusao:** weight decay 0.01 NAO ajudou. Confirma que o teto residual e de
+  DADOS, nao de regularizacao. Reverter para Adam sem decay (Exp. 9 e a config
+  vigente). Proxima alavanca real: mais dados.
+  
 ---
 
 ## Aprendizados transversais
