@@ -1,4 +1,5 @@
 """
+
 Audita o gabarito: pontua todas as cartas com o modelo de 278 e gera um HTML
 com TODOS os positivos ordenados do pior para o melhor rank. Os do topo (rank
 pior) sao os candidatos a erro de rotulo ou cauda dificil; voce inspeciona
@@ -7,6 +8,7 @@ visualmente e decide pela regra refinada (olho VISIVELMENTE fechado de um Pokemo
 O modelo PRIORIZA o que olhar; a decisao de marcar/desmarcar e sua.
 
 Saida: data/labels/auditoria_positivos.html
+
 """
 from pokemon.caminhos import RAW, IMAGES, LABELS, MODELOS
 import numpy as np
