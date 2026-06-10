@@ -25,6 +25,8 @@ SETS = {
     "swsh9":    ("BRS", "SWSH"), # Brilliant Stars
     "swsh11":   ("LOR", "SWSH"), # Lost Origin
     "swsh12.5": ("CRZ", "SWSH"), # Crown Zenith
+    "swsh8":    ("FST", "SWSH"), # Fusion Strike
+    "swsh10":   ("ASR", "SWSH"), # Astral Radiance
     # --- Sun & Moon (SM) ---
     "sm6":      ("FLI", "SM"),   # Forbidden Light
     "sm10":     ("UNB", "SM"),   # Unbroken Bonds
@@ -32,18 +34,24 @@ SETS = {
     "sm115":    ("HIF", "SM"),   # Hidden Fates
     "sma":      ("HFV", "SM"),   # Hidden Fates Shiny Vault (codigo custom; subset do sm115)
     "sm12":     ("CEC", "SM"),   # Cosmic Eclipse
+    "sm8":      ("LOT", "SM"),   # Lost Thunder
+    "sm9":      ("TEU", "SM"),   # Team Up
     # --- XY ---
     "xy2":      ("FLF", "XY"),   # Flashfire
     "xy6":      ("ROS", "XY"),   # Roaring Skies
     "xy7":      ("AOR", "XY"),   # Ancient Origins
     "xy8":      ("BKT", "XY"),   # BREAKthrough
     "xy11":     ("STS", "XY"),   # Steam Siege
+    "xy5":      ("PRC", "XY"),   # Primal Clash
+    "xy4":      ("PHF", "XY"),   # Phantom Forces
     # --- Black & White (BW) ---
     "bw3":      ("NVI", "BW"),   # Noble Victories
     "bw4":      ("NXD", "BW"),   # Next Destinies
     "bw7":      ("BCR", "BW"),   # Boundaries Crossed
     "bw9":      ("PLF", "BW"),   # Plasma Freeze
     "bw10":     ("PLB", "BW"),   # Plasma Blast
+    "bw11":     ("LTR", "BW"),   # Legendary Treasures
+    "bw6":      ("DRX", "BW"),   # Dragons Exalted
 }
 
 def main():

@@ -192,7 +192,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   saturado. Recall@K nao comparavel a rodadas anteriores (teste mudou de tamanho);
   PR-AUC e a metrica de comparacao valida daqui pra frente.
 
-  ### Exp. 10 — Fine-tuning SigLIP2, 2 blocos, 212 pos + weight decay 0.01 (AdamW)
+### Exp. 10 — Fine-tuning SigLIP2, 2 blocos, 212 pos + weight decay 0.01 (AdamW)
 - **Hipotese:** L2 contem o overfitting do Exp. 9; se ajudar, PR-AUC sobe (>=0.66).
 - **Resultado:** PR-AUC TESTE = 0.581 (vs 0.615 do Exp. 9). Fundo val epoca 3
   (vs 2), overfitting marginalmente mais tarde mas PR-AUC nao melhorou — piorou
@@ -200,6 +200,46 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
 - **Conclusao:** weight decay 0.01 NAO ajudou. Confirma que o teto residual e de
   DADOS, nao de regularizacao. Reverter para Adam sem decay (Exp. 9 e a config
   vigente). Proxima alavanca real: mais dados.
+
+### Exp. 11 — Fine-tuning SigLIP2, 2 blocos, gabarito ampliado (278 pos)
+- **Mudanca:** rotulados +8 sets (lote 3: FST, ASR, LOT, TEU, PRC, PHF, LTR, DRX),
+  todos de eras JA presentes (SWSH/SM/XY/BW). Gabarito 212 -> 278; catalogo
+  4.530 -> 5.802 cartas.
+- **Hipotese:** se ainda havia fome de dados (Exp. 9), +66 positivos sobe o PR-AUC.
+- **Resultado:** PR-AUC TESTE = 0.469 / 0.487 / 0.516 em tres rodadas (media ~0.49),
+  ABAIXO do 0.615 do Exp. 9. Teste: 42 pos em 871 cartas.
+- **Diagnostico:** resultado contraintuitivo (mais dados, PR-AUC menor) disparou
+  investigacao. Pipeline verificado integro: gabarito 278 completo sobre o catalogo
+  (sem falsos negativos), imagens presentes, teste bem distribuido (nao enviesado
+  para sets dificeis). A queda nao era artefato de pipeline. Mas o 0.615 do Exp. 9
+  era rodada UNICA — suspeita de que fosse o topo da variancia, nao a media.
+- **Decisao:** comparar 212 vs 278 com multiplas rodadas controladas (Exp. 12)
+  antes de concluir qualquer coisa. Licao de metodo: medir com rodada unica e
+  enganoso quando a curva de validacao e instavel.
+
+### Exp. 12 — Comparacao controlada 212 vs 278 (3 rodadas cada)
+- **Motivacao:** decidir se a queda do Exp. 11 era real ou se o 0.615 do Exp. 9
+  foi sorte. Treino sem seed fixo (so o split e fixo, rs=42), entao cada config
+  foi rodada 3x para estimar a distribuicao do PR-AUC.
+- **Metodo:** 212 reproduzido no catalogo filtrado de 4.564 (8 sets do lote 3
+  removidos via script nao-destrutivo); 278 no catalogo completo de 5.802.
+  Backups protegidos (catalogo_5802.csv, positivos_ids_278.csv), reversao e
+  restauracao por script auditavel.
+- **Resultado:**
+  - 212 @ 4.564: 0.525 / 0.545 / 0.577 (media ~0.55). O 0.615 original do Exp. 9
+    era o TOPO da variancia, fora da faixa das tres rodadas controladas.
+  - 278 @ 5.802: 0.469 / 0.487 / 0.516 (media ~0.49).
+  - As faixas NAO se sobrepoem (pior do 212 = 0.525 > melhor do 278 = 0.516).
+- **Conclusao:** 212 (~0.55) e melhor que 278 (~0.49) de forma reproduzivel.
+  Adicionar o lote 3 DEGRADOU o modelo, nao saturou. **Isto revisa a conclusao
+  do Exp. 9:** "mais dados sempre ajuda" e FALSO para este problema. O lote 1
+  (eras NOVAS, variacao genuina) ajudou; o lote 3 (eras JA vistas) prejudicou —
+  pouco sinal positivo novo + ~1.200 negativos novos diluindo. Existe um ponto
+  otimo de dados antes de 278.
+- **Licao de metodo:** rodada unica e enganosa com curva de validacao instavel;
+  comparar configs exige 3+ rodadas e olhar a distribuicao, nunca um ponto.
+- **Tensao em aberto:** o modelo e melhor com 212, mas o produto precisa rankear
+  os 5.802 (a colecao quer todas as eras). Resolver no proximo passo.
   
 ---
 
@@ -214,3 +254,11 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   (rotular), isolar a causa com um teste de uma linha (1 vs 2 blocos).
 - **A curva de perda treino vs validação é o detector de overfitting:** vê-se
   a decoreba acontecer no descolamento das duas curvas.
+- **Variancia de inicializacao mascara sinal:** sem seed no treino, uma rodada
+  unica pode estar no topo ou no fundo da distribuicao. Diferencas de PR-AUC
+  menores que a variancia entre rodadas nao sao conclusivas. Comparar configs
+  exige multiplas rodadas (media ± faixa), nao um ponto.
+- **"Mais dados" nao e monotonico:** dados que adicionam variacao genuina (eras
+  novas) ajudam; dados redundantes (mais do mesmo) podem prejudicar ao diluir o
+  sinal com negativos. O valor de um lote depende do que ele adiciona, nao do
+  volume.
