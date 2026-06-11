@@ -170,7 +170,7 @@ alguns positivos) são ambíguas para um classificador de imagem única.
 **Decisão:** 2 blocos adotado como config de referência (top-80 recall 89%,
 fundo val época 4). Comparado contra 3 blocos no Exp. 8.
 
-### Exp. 8 — Fine-tuning SigLIP2, 3 blocos, gabarito limpo (117 pos)
+## Exp. 8 — Fine-tuning SigLIP2, 3 blocos, gabarito limpo (117 pos)
 - **Hipótese:** mais capacidade descongelada melhora (se 2 blocos eram pouca
   capacidade) OU overfitta mais cedo (se o gargalo é dado).
 - **Resultado:** fundo do val na época 2 (vs época 4 com 2 blocos); top-80 recall
@@ -180,7 +180,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   desempate (após Exp. 3–4) apontando **fome de dados** como gargalo, não
   capacidade. 3 blocos descartado; 2 blocos mantido. Próxima alavanca: mais dados.
 
-### Exp. 9 — Fine-tuning SigLIP2, 2 blocos, gabarito ampliado (212 pos)
+## Exp. 9 — Fine-tuning SigLIP2, 2 blocos, gabarito ampliado (212 pos)
 - **Mudanca:** rotulados 16 sets novos (B&W ate SM, 5 eras), gabarito 117 -> 212.
 - **Hipotese:** se o gargalo era fome de dados (Exp. 3-4, 7-8), ~2x positivos
   eleva o teto (PR-AUC).
@@ -192,7 +192,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   saturado. Recall@K nao comparavel a rodadas anteriores (teste mudou de tamanho);
   PR-AUC e a metrica de comparacao valida daqui pra frente.
 
-### Exp. 10 — Fine-tuning SigLIP2, 2 blocos, 212 pos + weight decay 0.01 (AdamW)
+## Exp. 10 — Fine-tuning SigLIP2, 2 blocos, 212 pos + weight decay 0.01 (AdamW)
 - **Hipotese:** L2 contem o overfitting do Exp. 9; se ajudar, PR-AUC sobe (>=0.66).
 - **Resultado:** PR-AUC TESTE = 0.581 (vs 0.615 do Exp. 9). Fundo val epoca 3
   (vs 2), overfitting marginalmente mais tarde mas PR-AUC nao melhorou — piorou
@@ -201,7 +201,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   DADOS, nao de regularizacao. Reverter para Adam sem decay (Exp. 9 e a config
   vigente). Proxima alavanca real: mais dados.
 
-### Exp. 11 — Fine-tuning SigLIP2, 2 blocos, gabarito ampliado (278 pos)
+## Exp. 11 — Fine-tuning SigLIP2, 2 blocos, gabarito ampliado (278 pos)
 - **Mudanca:** rotulados +8 sets (lote 3: FST, ASR, LOT, TEU, PRC, PHF, LTR, DRX),
   todos de eras JA presentes (SWSH/SM/XY/BW). Gabarito 212 -> 278; catalogo
   4.530 -> 5.802 cartas.
@@ -217,7 +217,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   antes de concluir qualquer coisa. Licao de metodo: medir com rodada unica e
   enganoso quando a curva de validacao e instavel.
 
-### Exp. 12 — Comparacao controlada 212 vs 278 (3 rodadas cada)
+## Exp. 12 — Comparacao controlada 212 vs 278 (3 rodadas cada)
 - **Motivacao:** decidir se a queda do Exp. 11 era real ou se o 0.615 do Exp. 9
   foi sorte. Treino sem seed fixo (so o split e fixo, rs=42), entao cada config
   foi rodada 3x para estimar a distribuicao do PR-AUC.
@@ -241,7 +241,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
 - **Tensao em aberto:** o modelo e melhor com 212, mas o produto precisa rankear
   os 5.802 (a colecao quer todas as eras). Resolver no proximo passo.
 
-### Exp. 13 — Recorte da arte (resolucao como gargalo) — subconjunto Common/Uncommon/Rare
+## Exp. 13 — Recorte da arte (resolucao como gargalo) — subconjunto Common/Uncommon/Rare
 - **Motivacao:** auditoria (Exp. anteriores) mostrou que o modelo erra olhos
   fechados OBVIOS (Klefki ^^ com prob 0.008). Hipotese: o gargalo nao e dado nem
   capacidade, e RESOLUCAO — o olho (~1-2% da carta) some quando a carta inteira
@@ -264,6 +264,30 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   e special-art (Illustration/Secret/Ultra) ficaram fora; recorte fixo em 55%
   pode decepar Pokemon nessas. Tratamento delas = proxima fase.
 - **Custo:** ~30 min por rodada de treino (crop adiciona processamento de imagem).
+
+## Exp. 14 — Recorte da arte (55%) no catalogo COMPLETO (todas as raridades)
+- **Motivacao:** Exp. 13 provou o recorte no subconjunto facil (Common/Uncommon/
+  Rare, ~0.79). Faltava validar no escopo de PRODUTO: catalogo completo, incluindo
+  full-art e special-art (Illustration/Secret/Ultra), que sao mais dificeis.
+- **Premissa validada antes:** inspecao visual mostrou que o "centro de interesse"
+  da arte (rosto/olho do Pokemon) fica na metade superior mesmo em full-arts.
+  Recorte global simples (55% superior) deve servir para quase toda a base.
+- **Gabarito ajustado ao recorte:** revisao visual dos 312 positivos JA recortados
+  removeu os que perderam o Pokemon no corte. So 1 caiu (swsh12.5-GG22, full-art
+  com o bichinho na metade inferior). Gabarito 312 -> 311. Confirma a premissa:
+  99.7% dos positivos tem o olho na metade superior.
+- **Metodo:** treino com recorte de 55% sobre o catalogo completo (4.060 cartas
+  treino, 217 positivos), split estratificado fixo, 3 rodadas.
+- **Resultado:**
+  - Sem recorte (Exp. 11/auditoria): PR-AUC ~0.49.
+  - Com recorte (catalogo completo): 0.690 / 0.666 / 0.678 -> media ~0.678.
+  - Distribuicoes nao se sobrepoem. Ganho de +0.19, estavel (amplitude 0.024).
+  - Produto: top-10 precision 80-90%, recall@80 83-89%, recall 100% revisando
+    ~226-285 de 871 (corta ~70% do trabalho com cobertura total).
+- **Conclusao:** o recorte resolve o problema no escopo COMPLETO, nao so no
+  subconjunto facil. Bate a meta de 0.70 (melhor rodada 0.690, media 0.678 a um
+  passo). O modelo passou de "investigacao travada" para "pronto para produto".
+- **Custo:** ~35-40 min por rodada (catalogo completo + crop).
 
 ---
 
@@ -291,3 +315,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   destravamento veio de COMO a imagem e apresentada ao modelo (recorte). Antes de
   assumir "preciso de mais dados/capacidade", questionar se o sinal esta chegando
   intacto a rede.
+- **Shortcut learning e o pre-processamento como alavanca:** texto/moldura na
+  imagem sao atalhos que o modelo pode aprender em vez do sinal real. Controlar o
+  que entra na imagem (recorte) foi a maior alavanca do projeto — maior que dados
+  ou capacidade.

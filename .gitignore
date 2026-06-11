@@ -8,6 +8,10 @@ __pycache__/
 # --- Caches e imagens (volumosos, regeneraveis) ---
 data/cache_cards/
 data/images/
+data/amostra_recorte/
+data/teste_corte_topo/
+data/debug_layout/
+data/crop_teste_*.png
 
 # --- Derivados pesados, por extensao (nunca versionar) ---
 *.npz          # embeddings
@@ -26,6 +30,11 @@ data/labels/*.html
 
 # --- Modelos treinados ---
 data/modelos/
+
+# --- Backups datados de gabarito (temporarios, locais) ---
+data/labels/positivos_ids_3*.csv
+data/labels/positivos_ids_2*.csv
+data/labels/positivos_ids_278_pre_auditoria.csv
 
 # --- EXCECOES: fontes insubstituiveis, SEMPRE versionadas ---
 !data/labels/positivos_ids.csv
