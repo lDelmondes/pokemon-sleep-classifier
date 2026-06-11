@@ -2,10 +2,12 @@
 Treino experimental para o teste do recorte da arte. Identico ao
 treinar_finetuning_siglip, mas:
 - importa de split_rarity (so Common/Uncommon/Rare)
-- nesta versao BASELINE, ainda SEM recorte (mede o subconjunto puro)
-O recorte sera adicionado no CartasDataset depois, para isolar seu efeito.
+- aplica RECORTE da arte (55% superiores) no CartasDataset
+Compara contra o baseline (mesmo subconjunto, sem recorte) para isolar
+o efeito do recorte. Salva em melhor_recorte.pt.
 """
 from pokemon.caminhos import IMAGES, MODELOS
+import time
 import numpy as np
 import torch
 import torch.nn as nn
@@ -90,7 +92,7 @@ def avaliar_teste(modelo, loader, device):
 
 def main():
     device = "cuda"
-    print(f"Treinando em: {device} | BASELINE (filtro rarity, SEM recorte)")
+    print(f"Treinando em: {device} | BASELINE (filtro rarity, COM recorte)")
 
     modelo, preprocess = construir_modelo(blocos_descongelados=2)
     modelo.to(device)
@@ -117,10 +119,13 @@ def main():
     melhor_val = float("inf")
     sem_melhora = 0
     caminho = MODELOS / "melhor_recorte.pt"
+    t_inicio = time.perf_counter()
     for epoca in range(1, EPOCAS_MAX + 1):
+        t_epoca = time.perf_counter()
         pt = rodar_epoca(modelo, dl_treino, loss_fn, device, otimizador)
         pv = rodar_epoca(modelo, dl_val, loss_fn, device, otimizador=None)
-        print(f"Epoca {epoca:2} | treino {pt:.4f} | val {pv:.4f}", flush=True)
+        dt = time.perf_counter() - t_epoca
+        print(f"Epoca {epoca:2} | treino {pt:.4f} | val {pv:.4f} | {dt:.1f}s", flush=True)
         if pv < melhor_val:
             melhor_val = pv
             sem_melhora = 0
@@ -130,6 +135,8 @@ def main():
             if sem_melhora >= PACIENCIA:
                 print(f"\nEarly stopping na epoca {epoca}.")
                 break
+    t_total = time.perf_counter() - t_inicio
+    print(f"Tempo total de treino: {t_total:.1f}s ({t_total/60:.1f} min)")
 
     modelo.load_state_dict(torch.load(caminho))
     avaliar_teste(modelo, dl_teste, device)

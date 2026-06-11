@@ -240,7 +240,31 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   comparar configs exige 3+ rodadas e olhar a distribuicao, nunca um ponto.
 - **Tensao em aberto:** o modelo e melhor com 212, mas o produto precisa rankear
   os 5.802 (a colecao quer todas as eras). Resolver no proximo passo.
-  
+
+### Exp. 13 — Recorte da arte (resolucao como gargalo) — subconjunto Common/Uncommon/Rare
+- **Motivacao:** auditoria (Exp. anteriores) mostrou que o modelo erra olhos
+  fechados OBVIOS (Klefki ^^ com prob 0.008). Hipotese: o gargalo nao e dado nem
+  capacidade, e RESOLUCAO — o olho (~1-2% da carta) some quando a carta inteira
+  e espremida em 224x224.
+- **Metodo:** isolar a variavel "recorte". Filtrou-se o catalogo para raridades
+  de layout NORMAL (Common/Uncommon/Rare, onde a arte fica sempre na metade
+  superior) -> 4.022 cartas, 237 positivos. Mediu-se baseline (sem recorte) e
+  depois recorte conservador (manter 55% superiores da carta), 3 rodadas cada.
+- **Resultado:**
+  - Baseline (sem recorte): PR-AUC 0.507 / 0.566 / 0.559 -> media ~0.544.
+  - Com recorte (55% superior): PR-AUC 0.755 / 0.759 / 0.858 -> media ~0.79.
+  - Distribuicoes nao se sobrepoem (pior recorte 0.755 >> melhor baseline 0.566).
+  - Produto: top-10 precision 90-100%, recall@80 83-92%.
+- **Conclusao:** HIPOTESE CONFIRMADA de forma contundente. O gargalo era
+  resolucao do detalhe, nao dados nem capacidade. Recortar a arte (jogar fora
+  moldura+texto) dobra a fracao util da imagem e o olho fica visivel ao SigLIP.
+  Maior ganho do projeto (+0.25 PR-AUC) veio de uma mudanca de pre-processamento
+  da imagem, nao de mais dados ou hiperparametros.
+- **Escopo/limite:** testado so em layout normal (Common/Uncommon/Rare). Full-art
+  e special-art (Illustration/Secret/Ultra) ficaram fora; recorte fixo em 55%
+  pode decepar Pokemon nessas. Tratamento delas = proxima fase.
+- **Custo:** ~30 min por rodada de treino (crop adiciona processamento de imagem).
+
 ---
 
 ## Aprendizados transversais
@@ -262,3 +286,8 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   novas) ajudam; dados redundantes (mais do mesmo) podem prejudicar ao diluir o
   sinal com negativos. O valor de um lote depende do que ele adiciona, nao do
   volume.
+- **O gargalo pode estar no pre-processamento, nao no modelo nem nos dados:**
+  perseguimos dados (lotes) e capacidade (blocos) por muitos experimentos; o
+  destravamento veio de COMO a imagem e apresentada ao modelo (recorte). Antes de
+  assumir "preciso de mais dados/capacidade", questionar se o sinal esta chegando
+  intacto a rede.
