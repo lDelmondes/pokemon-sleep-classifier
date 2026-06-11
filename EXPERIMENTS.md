@@ -289,6 +289,28 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   passo). O modelo passou de "investigacao travada" para "pronto para produto".
 - **Custo:** ~35-40 min por rodada (catalogo completo + crop).
 
+### Exp. 15 — Recorte com corte do topo (remover faixa de nome/HP) — RESULTADO NEGATIVO
+- **Hipotese:** a faixa superior da carta (nome do Pokemon, HP, tipo) seria um
+  atalho de SHORTCUT LEARNING — o modelo poderia aprender a "ler o nome" em vez
+  de olhar o olho. Remover essa faixa forcaria o foco na arte e subiria o PR-AUC.
+- **Metodo:** recorte combinado — alem do limite inferior em 55% (Exp. 14),
+  cortar tambem 8.5% do topo (faixa de nome/HP). Fracao 8.5% escolhida por
+  inspecao visual (remove o texto sem decepar o rosto, que fica logo abaixo).
+  Catalogo completo, 3 rodadas.
+- **Resultado:**
+  - Recorte 55% so (Exp. 14): 0.690 / 0.666 / 0.678 -> media ~0.678.
+  - Recorte 8.5%-55% (corte topo): 0.675 / 0.670 / 0.689 -> media ~0.678.
+  - IDENTICO. Faixas totalmente sobrepostas.
+- **Conclusao:** hipotese REFUTADA. Cortar o topo nao mudou nada — o texto de
+  nome/HP NAO era um atalho relevante. O modelo ja estava olhando a arte, nao
+  lendo o nome. O recorte de 55% (Exp. 14) sozinho ja capturava todo o ganho
+  desta alavanca. Resultado negativo valioso: confirma que o sinal aprendido e
+  a arte, e descarta a suspeita de shortcut learning pelo texto.
+- **Leitura estrategica:** apos o salto grande do recorte (0.49->0.68), as
+  afinacoes finas rendem ~zero. Sinal de proximidade do teto do problema. A
+  questao deixa de ser "qual proxima alavanca" e passa a ser "o modelo ja serve
+  ao produto?" (revisar ~180/871 = recall 100%, top-30 precision ~80%).
+
 ---
 
 ## Aprendizados transversais

@@ -1,12 +1,12 @@
 """
-Treino com RECORTE da arte (55% superior) sobre o catalogo COMPLETO — todas as
-raridades, nao so Common/Uncommon/Rare. Mede se o recorte (validado no Exp. 13
-no subconjunto facil) tambem ajuda no escopo de produto completo.
-Compara contra ~0.49 (catalogo completo SEM recorte, Exp. 11/auditoria).
+Treino com RECORTE DA ILUSTRAÇÃO (de 8.5% a 55% da altura) sobre o catalogo COMPLETO.
+Remove a barra de nome superior (8.5%) e a moldura/texto inferior (abaixo de 55%) 
+para mitigar vieses de eras de cartas e focar estritamente na arte.
 Salva em melhor_recorte_full.pt.
 """
 from pokemon.caminhos import IMAGES, MODELOS
 import numpy as np
+import sys
 import time
 import torch
 import torch.nn as nn
@@ -22,6 +22,10 @@ EPOCAS_MAX = 50
 PACIENCIA = 7
 LEARNING_RATE = 1e-5
 BATCH_SIZE = 16
+
+# Definição dos limites proporcionais de corte como constantes globais
+CORTE_TOPO = 0.085
+LIMITE_INFERIOR = 0.55
 
 class CartasDataset(Dataset):
     def __init__(self, df, preprocess, treino=False):
@@ -39,11 +43,19 @@ class CartasDataset(Dataset):
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
         img = Image.open(IMAGES / f"{row['card_id']}.png").convert("RGB")
-        # RECORTE: 55% superiores (a arte), descarta moldura+texto inferior.
+        
+        # Captura as dimensões da imagem original
         w, h = img.size
-        img = img.crop((0, 0, w, int(h * 0.55)))
+        
+        # RECORTE ADAPTADO: 
+        # PIL.Image.crop recebe uma tupla: (esquerda, topo, direita, base)
+        # x_inicial = 0, y_inicial = 8.5% da altura
+        # x_final = w, y_final = 55% da altura
+        img = img.crop((0, int(h * CORTE_TOPO), w, int(h * LIMITE_INFERIOR)))
+        
         if self.aug:
             img = self.aug(img)
+            
         img = self.preprocess(img)
         label = torch.tensor(row["label"], dtype=torch.float32)
         return img, label
@@ -89,8 +101,12 @@ def avaliar_teste(modelo, loader, device):
     print(f"  Para recall 100%: revisar {ultimo} de {len(y)}")
 
 def main():
-    device = "cuda"
-    print(f"Treinando em: {device} | RECORTE no catalogo COMPLETO")
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
+    # ALTERAÇÃO 1: Captura o número da rodada do terminal (ou usa "1" como padrão)
+    rodada = sys.argv[1] if len(sys.argv) > 1 else "1"
+    
+    print(f"Treinando em: {device} | Rodada: {rodada} | RECORTE FLUTUANTE (8.5% - 55%) no catalogo COMPLETO")
 
     modelo, preprocess = construir_modelo(blocos_descongelados=2)
     modelo.to(device)
@@ -116,7 +132,10 @@ def main():
 
     melhor_val = float("inf")
     sem_melhora = 0
-    caminho = MODELOS / "melhor_recorte_full.pt"
+    
+    # ALTERAÇÃO 2: O nome do arquivo agora contém a variável "rodada"
+    caminho = MODELOS / f"melhor_recorte_full_{rodada}.pt"
+    
     t_inicio = time.perf_counter()
     for epoca in range(1, EPOCAS_MAX + 1):
         t_epoca = time.perf_counter()
@@ -136,6 +155,7 @@ def main():
     t_total = time.perf_counter() - t_inicio
     print(f"Tempo total de treino: {t_total:.1f}s ({t_total/60:.1f} min)")
 
+    # Ele vai carregar o modelo certo da rodada atual para testar
     modelo.load_state_dict(torch.load(caminho))
     avaliar_teste(modelo, dl_teste, device)
 
