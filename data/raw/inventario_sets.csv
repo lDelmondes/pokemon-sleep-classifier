@@ -1,0 +1,95 @@
+serie,set_id,set_nome,cartas,ja_tenho
+bw,bw1,Black & White,115,False
+bw,bwp,BW Black Star Promos,101,False
+bw,bw2,Emerging Powers,98,False
+bw,bw3,Noble Victories,102,True
+bw,bw4,Next Destinies,103,True
+bw,bw5,Dark Explorers,111,False
+bw,bw6,Dragons Exalted,128,True
+bw,dv1,Dragon Vault,21,False
+bw,bw7,Boundaries Crossed,153,True
+bw,bw8,Plasma Storm,138,False
+bw,bw9,Plasma Freeze,122,True
+bw,bw10,Plasma Blast,105,True
+bw,rc,Radiant Collection,25,False
+bw,bw11,Legendary Treasures,140,True
+xy,xyp,XY Black Star Promos,216,False
+xy,xy0,Kalos Starter Set,39,False
+xy,xya,Yellow A Alternate,6,False
+xy,xy1,XY,146,False
+xy,xy2,Flashfire,110,True
+xy,xy3,Furious Fists,114,False
+xy,xy4,Phantom Forces,124,True
+xy,xy5,Primal Clash,164,True
+xy,dc1,Double Crisis,34,False
+xy,xy6,Roaring Skies,112,True
+xy,xy7,Ancient Origins,101,True
+xy,xy8,BREAKthrough,165,True
+xy,xy9,BREAKpoint,126,False
+xy,g1,Generations,117,False
+xy,xy10,Fates Collide,129,False
+xy,xy11,Steam Siege,116,True
+xy,xy12,Evolutions,113,False
+sm,smp,SM Black Star Promos,248,False
+sm,sm1,Sun & Moon,172,False
+sm,sm2,Guardians Rising,169,False
+sm,sm3,Burning Shadows,169,False
+sm,sm3.5,Shining Legends,78,False
+sm,sm4,Crimson Invasion,125,False
+sm,sm5,Ultra Prism,173,False
+sm,sm6,Forbidden Light,146,True
+sm,sm7,Celestial Storm,183,False
+sm,sm7.5,Dragon Majesty,78,False
+sm,sm8,Lost Thunder,236,True
+sm,sm9,Team Up,196,True
+sm,det1,Detective Pikachu,18,False
+sm,sm10,Unbroken Bonds,234,True
+sm,sm11,Unified Minds,258,True
+sm,sma,Hidden Fates Shiny Vault,94,True
+sm,sm115,Hidden Fates,69,True
+sm,sm12,Cosmic Eclipse,271,True
+swsh,swshp,SWSH Black Star Promos,307,False
+swsh,swsh1,Sword & Shield,216,False
+swsh,swsh2,Rebel Clash,209,False
+swsh,swsh3,Darkness Ablaze,201,False
+swsh,fut2020,Pokémon Futsal 2020,5,False
+swsh,swsh3.5,Champion's Path,80,False
+swsh,swsh4,Vivid Voltage,203,False
+swsh,swsh4.5,Shining Fates,195,False
+swsh,swsh5,Battle Styles,183,True
+swsh,swsh6,Chilling Reign,233,False
+swsh,swsh7,Evolving Skies,237,True
+swsh,cel25,Celebrations,50,False
+swsh,swsh8,Fusion Strike,284,True
+swsh,swsh9,Brilliant Stars,216,True
+swsh,swsh10,Astral Radiance,246,True
+swsh,swsh10.5,Pokémon GO,88,False
+swsh,swsh11,Lost Origin,247,True
+swsh,swsh12,Silver Tempest,245,False
+swsh,swsh12.5,Crown Zenith,230,True
+sv,sv01,Scarlet & Violet,258,True
+sv,sve,Scarlet & Violet Energy,24,False
+sv,svp,SVP Black Star Promos,226,True
+sv,sv02,Paldea Evolved,279,True
+sv,sv03,Obsidian Flames,230,False
+sv,sv03.5,151,207,True
+sv,mfb,My First Battle,48,False
+sv,sv04,Paradox Rift,266,False
+sv,sv04.5,Paldean Fates,245,False
+sv,sv05,Temporal Forces,218,True
+sv,sv06,Twilight Masquerade,226,True
+sv,sv06.5,Shrouded Fable,99,False
+sv,sv07,Stellar Crown,175,True
+sv,sv08,Surging Sparks,252,True
+sv,sv08.5,Prismatic Evolutions,180,False
+sv,sv09,Journey Together,190,False
+sv,sv10,Destined Rivals,244,False
+sv,sv10.5b,Black Bolt,172,False
+sv,sv10.5w,White Flare,173,True
+me,mee,Mega Evolution Energy,8,False
+me,me01,Mega Evolution,188,False
+me,mep,MEP Black Star Promos,52,False
+me,me02,Phantasmal Flames,130,False
+me,me02.5,Ascended Heroes,295,False
+me,me03,Perfect Order,124,False
+me,me04,Chaos Rising,122,False
