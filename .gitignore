@@ -17,6 +17,8 @@ data/crop_teste_*.png
 *.npz          # embeddings
 *.pt           # modelos treinados
 *.pkl
+data/*.html
+data/*.csv
 
 # --- Derivados em CSV (reconstruidos pelos scripts) ---
 data/raw/catalogo_completo.csv
