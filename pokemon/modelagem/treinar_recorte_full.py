@@ -1,11 +1,12 @@
 """
-Treino com RECORTE DA ILUSTRAÇÃO (de 8.5% a 55% da altura) sobre o catalogo COMPLETO.
-Remove a barra de nome superior (8.5%) e a moldura/texto inferior (abaixo de 55%) 
-para mitigar vieses de eras de cartas e focar estritamente na arte.
-Salva em melhor_recorte_full.pt.
+Treino com RECORTE ADAPTATIVO POR RARIDADE (Exp. 16) sobre o catalogo COMPLETO.
+Topo fixo em 8.5%; o limite inferior (base) varia por raridade, via
+pokemon.modelagem.recorte_rarity. Salva em exp16_adaptativo_<rodada>.pt
+(NÃO sobrescreve a âncora melhor_recorte_full_*.pt).
 """
-from pokemon.caminhos import IMAGES, MODELOS
+from pokemon.caminhos import IMAGES, MODELOS, RAW
 import numpy as np
+import pandas as pd
 import sys
 import time
 import torch
@@ -17,20 +18,19 @@ from sklearn.metrics import average_precision_score
 
 from pokemon.modelagem.split import carregar_dados_rotulados, dividir   # << split COMPLETO
 from pokemon.modelagem.modelo_siglip import construir_modelo
+from pokemon.modelagem.recorte_rarity import janela_para_rarity, checar_cobertura
 
 EPOCAS_MAX = 50
 PACIENCIA = 7
 LEARNING_RATE = 1e-5
 BATCH_SIZE = 16
 
-# Definição dos limites proporcionais de corte como constantes globais
-CORTE_TOPO = 0.085
-LIMITE_INFERIOR = 0.55
 
 class CartasDataset(Dataset):
-    def __init__(self, df, preprocess, treino=False):
+    def __init__(self, df, preprocess, mapa_janela, treino=False):
         self.df = df.reset_index(drop=True)
         self.preprocess = preprocess
+        self.mapa_janela = mapa_janela            # card_id -> (topo, base)
         self.aug = transforms.Compose([
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomRotation(degrees=15),
@@ -42,23 +42,25 @@ class CartasDataset(Dataset):
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
-        img = Image.open(IMAGES / f"{row['card_id']}.png").convert("RGB")
-        
-        # Captura as dimensões da imagem original
+        card_id = str(row["card_id"])
+        img = Image.open(IMAGES / f"{card_id}.png").convert("RGB")
+
+        # Dimensões da imagem original
         w, h = img.size
-        
-        # RECORTE ADAPTADO: 
-        # PIL.Image.crop recebe uma tupla: (esquerda, topo, direita, base)
-        # x_inicial = 0, y_inicial = 8.5% da altura
-        # x_final = w, y_final = 55% da altura
-        img = img.crop((0, int(h * CORTE_TOPO), w, int(h * LIMITE_INFERIOR)))
-        
+
+        # RECORTE DINÂMICO: janela (topo, base) definida pela raridade da carta.
+        # PIL.Image.crop -> (esquerda, topo, direita, base). Mesmo ponto do
+        # pipeline onde antes ficava o crop fixo: crop -> aug -> preprocess.
+        topo, base = self.mapa_janela[card_id]
+        img = img.crop((0, int(h * topo), w, int(h * base)))
+
         if self.aug:
             img = self.aug(img)
-            
+
         img = self.preprocess(img)
         label = torch.tensor(row["label"], dtype=torch.float32)
         return img, label
+
 
 def rodar_epoca(modelo, loader, loss_fn, device, otimizador=None):
     treinando = otimizador is not None
@@ -77,6 +79,7 @@ def rodar_epoca(modelo, loader, loss_fn, device, otimizador=None):
             perda_total += perda.item() * len(labels)
             n += len(labels)
     return perda_total / n
+
 
 def avaliar_teste(modelo, loader, device):
     modelo.eval()
@@ -100,13 +103,14 @@ def avaliar_teste(modelo, loader, device):
     ultimo = int(np.where(y_ord == 1)[0].max()) + 1
     print(f"  Para recall 100%: revisar {ultimo} de {len(y)}")
 
+
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    
-    # ALTERAÇÃO 1: Captura o número da rodada do terminal (ou usa "1" como padrão)
+
+    # Captura o número da rodada do terminal (ou usa "1" como padrão)
     rodada = sys.argv[1] if len(sys.argv) > 1 else "1"
-    
-    print(f"Treinando em: {device} | Rodada: {rodada} | RECORTE FLUTUANTE (8.5% - 55%) no catalogo COMPLETO")
+
+    print(f"Treinando em: {device} | Rodada: {rodada} | RECORTE ADAPTATIVO POR RARIDADE")
 
     modelo, preprocess = construir_modelo(blocos_descongelados=2)
     modelo.to(device)
@@ -114,11 +118,27 @@ def main():
     df = carregar_dados_rotulados()
     treino_df, val_df, teste_df = dividir(df)
 
-    dl_treino = DataLoader(CartasDataset(treino_df, preprocess, treino=True),
+    # --- Exp.16: mapa card_id -> (topo, base) a partir do catálogo completo ---
+    catalogo = pd.read_csv(RAW / "catalogo_completo.csv")
+    catalogo["rarity"] = catalogo["rarity"].fillna("nan").astype(str)
+    checar_cobertura(catalogo)                       # GATE: fail-loud se faltar raridade
+    mapa_janela = {str(r.card_id): janela_para_rarity(r.rarity)
+                   for r in catalogo.itertuples()}
+    faltando = set(df["card_id"].astype(str)) - set(mapa_janela)
+    if faltando:
+        raise ValueError(
+            f"{len(faltando)} cards rotulados fora do catálogo "
+            f"(ex: {list(faltando)[:5]}). Recorte não definido para eles."
+        )
+    bases = sorted({b for _, b in mapa_janela.values()})
+    print(f"[exp16] recorte dinâmico ATIVO | {len(mapa_janela)} cards | bases={bases}")
+    # --------------------------------------------------------------------------
+
+    dl_treino = DataLoader(CartasDataset(treino_df, preprocess, mapa_janela, treino=True),
                            batch_size=BATCH_SIZE, shuffle=True)
-    dl_val = DataLoader(CartasDataset(val_df, preprocess, treino=False),
+    dl_val = DataLoader(CartasDataset(val_df, preprocess, mapa_janela, treino=False),
                         batch_size=BATCH_SIZE, shuffle=False)
-    dl_teste = DataLoader(CartasDataset(teste_df, preprocess, treino=False),
+    dl_teste = DataLoader(CartasDataset(teste_df, preprocess, mapa_janela, treino=False),
                           batch_size=BATCH_SIZE, shuffle=False)
 
     n_pos = int(treino_df["label"].sum())
@@ -132,10 +152,10 @@ def main():
 
     melhor_val = float("inf")
     sem_melhora = 0
-    
-    # ALTERAÇÃO 2: O nome do arquivo agora contém a variável "rodada"
-    caminho = MODELOS / f"melhor_recorte_full_{rodada}.pt"
-    
+
+    # Nome de saída separado da âncora (NÃO sobrescreve melhor_recorte_full_*.pt)
+    caminho = MODELOS / f"exp16_adaptativo_{rodada}.pt"
+
     t_inicio = time.perf_counter()
     for epoca in range(1, EPOCAS_MAX + 1):
         t_epoca = time.perf_counter()
@@ -155,9 +175,10 @@ def main():
     t_total = time.perf_counter() - t_inicio
     print(f"Tempo total de treino: {t_total:.1f}s ({t_total/60:.1f} min)")
 
-    # Ele vai carregar o modelo certo da rodada atual para testar
+    # Carrega o melhor checkpoint da rodada atual para o teste
     modelo.load_state_dict(torch.load(caminho))
     avaliar_teste(modelo, dl_teste, device)
+
 
 if __name__ == "__main__":
     main()

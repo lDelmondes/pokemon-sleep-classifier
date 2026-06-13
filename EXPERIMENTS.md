@@ -289,7 +289,7 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   passo). O modelo passou de "investigacao travada" para "pronto para produto".
 - **Custo:** ~35-40 min por rodada (catalogo completo + crop).
 
-### Exp. 15 — Recorte com corte do topo (remover faixa de nome/HP) — RESULTADO NEGATIVO
+## Exp. 15 — Recorte com corte do topo (remover faixa de nome/HP) — RESULTADO NEGATIVO
 - **Hipotese:** a faixa superior da carta (nome do Pokemon, HP, tipo) seria um
   atalho de SHORTCUT LEARNING — o modelo poderia aprender a "ler o nome" em vez
   de olhar o olho. Remover essa faixa forcaria o foco na arte e subiria o PR-AUC.
@@ -310,6 +310,81 @@ fundo val época 4). Comparado contra 3 blocos no Exp. 8.
   afinacoes finas rendem ~zero. Sinal de proximidade do teto do problema. A
   questao deixa de ser "qual proxima alavanca" e passa a ser "o modelo ja serve
   ao produto?" (revisar ~180/871 = recall 100%, top-30 precision ~80%).
+
+## Exp. 16 — Recorte adaptativo por raridade
+
+**Hipótese:** uma janela de recorte por raridade (em vez de 0–55% fixo) melhora o
+PR-AUC, combinando (a) apertar a base nos layouts normais para remover a caixa
+"Sleeping Pokémon" e (b) alargar a janela em full-arts, onde a arte sangra e o
+Pokémon fica mais baixo.
+
+**Ressalva de desenho (registrada ANTES de rodar):** o dicionário implementado
+virou ~mecanismo (a) puro. Full-arts (Illustration/Special/Ultra/Hyper/Secret)
+ficaram em 0.55 — idênticos à produção. Só `Black White Rare` foi a 0.60. A parte
+(b), que era a promissora, não foi de fato testada; o experimento mede
+essencialmente "apertar os normais de 0.55→0.48 ajuda?".
+
+**Setup:** dev set idêntico à âncora — 4060 treino / 871 val / 871 teste, 311
+positivos, prevalência ~5.3%, `pos_weight=17.7`, split estratificado seed 42.
+Única variável vs âncora = janela de recorte por carta (topo fixo 0.085). 3 rodadas.
+
+**Armadilha de infra encontrada no setup (lição transversal):** a ingestão do
+universo de inferência havia sobrescrito `catalogo_completo.csv` (5.836 → 12.249),
+e o `split.py` lia esse arquivo sem distinguir desenvolvimento de inferência. A
+primeira tentativa treinou com 8324 cartas / `pos_weight=37.4` — ~4.200 negativos
+de inferência vazados para o treino. Corrigido congelando o universo de
+desenvolvimento em `catalogo_desenvolvimento.csv` e travando o split nele. Lição:
+*fonte de dados implícita é dívida — o split deve declarar seu universo, não
+herdar o arquivo do dia.*
+
+**Resultados (PR-AUC no dev test):**
+
+| | R1 | R2 | R3 | Média | Faixa |
+|---|---|---|---|---|---|
+| Âncora (0.55 fixo) | 0.675 | 0.670 | 0.689 | 0.678 | [0.670, 0.689] |
+| Exp.16 (adaptativo) | 0.694 | 0.709 | 0.675 | 0.693 | [0.675, 0.709] |
+
+**Leitura:** diferença de médias +0.015, mas as faixas se sobrepõem por completo
+(a âncora chega a 0.689; o adaptativo desce a 0.675). Dentro do ruído de ±0.02 de
+seed, indistinguíveis. **Resultado: neutro** — nenhuma config é estatisticamente
+superior à outra.
+
+**Convergência com Exp.15:** confirma, por outro caminho, que o modelo não se
+apoia no texto da carta — já olha a arte. Remover mais texto da base (mec. (a)) não
+move o ponteiro porque não era texto que estava sendo lido. Duas evidências
+independentes, mesma conclusão.
+
+**Em aberto:** a hipótese (b) — full-arts com janela > 0.55 — não foi testada e
+segue válida, não refutada. Candidata natural a experimento futuro.
+
+**Decisão — adoção sob equivalência (NÃO por métrica):** adotado o recorte
+adaptativo (na forma testada: normais a 0.48, full-arts em 0.55) como configuração
+de produção. A justificativa não é ganho de PR-AUC — não há, o Exp.16 é neutro. É
+decisão de *design* sob equivalência estatística: como o recorte mais agressivo nos
+normais custa zero de performance, escolho a entrada mais alinhada ao objetivo do
+produto — máximo de arte, mínimo de moldura/texto. Se o modelo deve decidir pela
+ARTE, mostrar a ele só a arte é a entrada fiel ao objetivo, esteja o texto sendo
+usado hoje ou não. Benefício colateral: menor superfície para shortcut learning em
+distribuições futuras (eras e layouts novos). Explicitamente *não* é correção de um
+atalho existente — Exp.15 e 16 mostraram que não há.
+
+**Modelo de produção:** `exp16_adaptativo_1.pt` — a MEDIANA das 3 rodadas (0.694),
+não o pico (0.709, R2). Escolher o máximo de N rodadas é estimador enviesado para
+cima e regride à média fora da amostra; adotar a mediana entre instâncias
+equivalentes evita ancorar a produção no extremo da variância de seed. Coerente com
+a tese transversal do projeto: 1 número é ruído — por isso 3 rodadas, e por isso
+não se escolhe o melhor de 3.
+
+**Validação em produção:** lista de compras regenerada com o `_1`, recorte
+adaptativo na inferência idêntico ao do treino (mesma fonte de janela,
+`recorte_rarity.py` — sem train-inference skew, confirmado por gate de cobertura).
+Precisão das candidatas por contagem manual — top 50: 100% (50/50); top 100: 98%
+(98/100); top 300: 94% (282/300). Equivalente à âncora (~97% no top 300, `_3`),
+dentro do ruído já aceito. Ressalva honesta: a contagem da âncora foi estimativa
+de olho (~4 FP); esta é contagem dura — parte do gap é medição mais rigorosa, não
+regressão real. Qualidade decai como ladeira suave: os erros se concentram na cauda
+(score já baixo), onde a revisão humana opera em modo cético — o lugar certo para
+errar numa ferramenta com humano no loop.
 
 ---
 

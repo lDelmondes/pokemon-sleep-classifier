@@ -1,12 +1,17 @@
 """
 Gera a LISTA DE COMPRAS: pontua todas as cartas com imagem usando o modelo de
-recorte (melhor_recorte_full_3.pt), aplicando o MESMO recorte do treino
-(8.5%-55%). Ordena por score. Marca o que ja e gabarito (positivo confirmado)
-vs candidata nova (foco da revisao).
+PRODUCAO (exp16_adaptativo_1.pt — mediana das 3 rodadas do Exp.16), aplicando o
+MESMO recorte do treino: RECORTE ADAPTATIVO POR RARIDADE (topo 8.5%, base por
+raridade via recorte_rarity.py). Ordena por score. Marca gabarito vs candidata.
+
+CRITICO: o recorte da inferencia tem que ser IDENTICO ao do treino do modelo.
+Como o _1 treinou com janela por raridade, aqui tambem cortamos por raridade —
+senao o modelo ve, na inferencia, faixas que nunca viu no treino (train-inference
+skew), justo onde mora o texto que o recorte adaptativo removeu.
 
 Saidas:
 - data/lista_compras.csv  (TODAS as cartas: rank, score, flags)
-- data/lista_compras.html (top 300 recortadas, gabarito em verde / candidata destacada)
+- data/lista_compras.html (top N recortadas, gabarito em verde / candidata destacada)
 """
 from pokemon.caminhos import RAW, IMAGES, LABELS, MODELOS
 import numpy as np
@@ -18,43 +23,55 @@ import base64
 from io import BytesIO
 
 from pokemon.modelagem.modelo_siglip import construir_modelo
+from pokemon.modelagem.recorte_rarity import janela_para_rarity, checar_cobertura
 
-MODELO = "melhor_recorte_full_3.pt"
-CORTE_TOPO = 0.085
-LIMITE_INFERIOR = 0.55
+MODELO = "exp16_adaptativo_1.pt"
 TOP_HTML = 500
+
+
+def recortar_por_rarity(img, rarity):
+    """Recorte IDENTICO ao treino do _1: topo fixo 0.085, base pela raridade."""
+    topo, base = janela_para_rarity(rarity)
+    w, h = img.size
+    return img.crop((0, int(h * topo), w, int(h * base)))
+
 
 class InferDataset(Dataset):
     def __init__(self, df, preprocess):
         self.df = df.reset_index(drop=True)
         self.preprocess = preprocess
+
     def __len__(self):
         return len(self.df)
+
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
         img = Image.open(IMAGES / f"{row['card_id']}.png").convert("RGB")
-        w, h = img.size
-        img = img.crop((0, int(h * CORTE_TOPO), w, int(h * LIMITE_INFERIOR)))  # MESMO recorte do treino
+        img = recortar_por_rarity(img, row["rarity"])   # recorte por raridade da carta
         return self.preprocess(img), idx
 
-def recorte_b64(card_id):
+
+def recorte_b64(card_id, rarity):
     img = Image.open(IMAGES / f"{card_id}.png").convert("RGB")
-    w, h = img.size
-    img = img.crop((0, int(h * CORTE_TOPO), w, int(h * LIMITE_INFERIOR)))
+    img = recortar_por_rarity(img, rarity)
     buf = BytesIO(); img.save(buf, format="PNG")
     return base64.b64encode(buf.getvalue()).decode()
+
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     modelo, preprocess = construir_modelo(blocos_descongelados=2)
     modelo.load_state_dict(torch.load(MODELOS / MODELO))
     modelo.to(device).eval()
+    print(f"Modelo de producao: {MODELO}")
 
-    cat = pd.read_csv(RAW / "catalogo_completo.csv")
-    cat = cat[cat["image_url"].notna()].reset_index(drop=True)   # so com imagem
-    # garante que o PNG existe de fato no disco (alguns tem url mas falharam)
+    cat = pd.read_csv(RAW / "catalogo_completo.csv")     # 12k = universo de INFERENCIA (correto aqui)
+    cat["rarity"] = cat["rarity"].fillna("nan").astype(str)
+    cat = cat[cat["image_url"].notna()].reset_index(drop=True)
     cat = cat[cat["card_id"].apply(lambda c: (IMAGES / f"{c}.png").exists())].reset_index(drop=True)
-    print(f"Pontuando {len(cat)} cartas com imagem...")
+
+    checar_cobertura(cat)   # GATE: toda raridade do universo tem janela definida
+    print(f"Pontuando {len(cat)} cartas com imagem (recorte adaptativo por raridade)...")
 
     positivos = set(pd.read_csv(LABELS / "gabarito.csv")["card_id"])
 
@@ -83,7 +100,7 @@ def main():
 
     cards = ""
     for _, r in top.iterrows():
-        b64 = recorte_b64(r["card_id"])
+        b64 = recorte_b64(r["card_id"], r["rarity"])
         classe = "gabarito" if r["ja_gabarito"] else "candidata"
         tag = "JA TENHO" if r["ja_gabarito"] else "CANDIDATA"
         cards += f"""
@@ -116,6 +133,7 @@ def main():
 
     (RAW.parent / "lista_compras.html").write_text(html, encoding="utf-8")
     print(f"HTML salvo: lista_compras.html")
+
 
 if __name__ == "__main__":
     main()

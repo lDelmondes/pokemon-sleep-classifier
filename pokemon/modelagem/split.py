@@ -9,11 +9,12 @@ from pokemon.caminhos import RAW, LABELS
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+CATALOGO_DEV = RAW / "catalogo_desenvolvimento.csv"
+
 def carregar_dados_rotulados():
-    """Monta um DataFrame com card_id + label (1=positivo) para as cartas
-    COM imagem. Junta o catalogo (universo) com o gabarito (positivos)."""
-    cat = pd.read_csv(RAW / "catalogo_completo.csv")
-    cat = cat[cat["image_url"].notna()].copy()      # so cartas com imagem
+    """card_id + label para as cartas COM imagem do universo de DESENVOLVIMENTO."""
+    cat = pd.read_csv(CATALOGO_DEV)
+    cat = cat[cat["image_url"].notna()].copy()
     positivos = set(pd.read_csv(LABELS / "gabarito.csv")["card_id"])
     cat["label"] = cat["card_id"].isin(positivos).astype(int)
     return cat[["card_id", "set_codigo", "era", "label"]].reset_index(drop=True)

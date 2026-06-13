@@ -12,6 +12,7 @@ data/amostra_recorte/
 data/teste_corte_topo/
 data/debug_layout/
 data/crop_teste_*.png
+data/preflight_exp16/
 
 # --- Derivados pesados, por extensao (nunca versionar) ---
 *.npz          # embeddings
@@ -21,6 +22,7 @@ data/*.html
 data/*.csv
 
 # --- Derivados em CSV (reconstruidos pelos scripts) ---
+data/raw/catalogo_desenvolvimento.csv
 data/raw/catalogo_completo.csv
 data/raw/scores_clip.csv
 data/raw/predicoes.csv
