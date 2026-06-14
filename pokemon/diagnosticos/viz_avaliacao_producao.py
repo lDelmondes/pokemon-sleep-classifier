@@ -78,7 +78,7 @@ def main():
 
     img_dir = ROOT / "docs" / "img"; img_dir.mkdir(parents=True, exist_ok=True)
 
-    # ---------- Grafico 1: Curva PR (producao roxo = foco, ancora cinza = contexto) ----------
+# ---------- Grafico 1: Curva PR (producao roxo = foco, ancora cinza = contexto) ----------
     fig, ax = plt.subplots(figsize=(7, 5.6)); limpa(ax, grid="y")
     prec_a, rec_a, _ = precision_recall_curve(y, probs_anc)
     ax.plot(rec_a, prec_a, lw=2, color=CINZA, zorder=2)
@@ -86,16 +86,17 @@ def main():
     ax.plot(rec_p, prec_p, lw=2.6, color=ROXO, zorder=3)
     ax.axhline(y.mean(), ls=":", lw=1.2, color=CINZA, zorder=1)
     ax.text(0.015, y.mean() + 0.02, "~aleatório", fontsize=8.5, color=CINZA)
-    # rotulagem direta (sem legenda)
-    ax.text(0.40, 0.93, f"Produção (adaptativo) · AP {ap_prod:.3f}", fontsize=9.5, color=ROXO, fontweight="bold")
-    ax.text(0.40, 0.85, f"Âncora (0.55 fixo) · AP {ap_anc:.3f}", fontsize=9.5, color=CINZA)
+    # rotulagem direta no espaco vazio (centro-baixo), longe das curvas
+    ax.text(0.44, 0.27, f"Produção (adaptativo) · AP {ap_prod:.3f}", fontsize=9.5, color=ROXO, fontweight="bold")
+    ax.text(0.44, 0.18, f"Âncora (0.55 fixo) · AP {ap_anc:.3f}", fontsize=9.5, color=CINZA)
     ax.set_xlabel("Recall", fontsize=10.5, color=CINZA_ESC)
     ax.set_ylabel("Precision", fontsize=10.5, color=CINZA_ESC)
     ax.set_xlim(0, 1.02); ax.set_ylim(0, 1.03)
-    titulo(ax, "Produção e âncora são estatisticamente idênticas",
+    titulo(ax, "Produção e âncora têm desempenho equivalente",
            "Curva precision-recall no mesmo teste · a escolha foi de design, não de métrica")
-    rodape(fig, "As duas curvas praticamente se sobrepõem: configs equivalentes. O adaptativo foi "
-                "adotado por mostrar ao modelo só a arte, não por ganho de PR-AUC.")
+    rodape(fig, f"AP quase idêntico ({ap_prod:.3f} vs {ap_anc:.3f}) — diferença dentro do ruído de "
+                f"±0.02 entre rodadas. As curvas trocam de posição ao longo do recall: variação entre "
+                f"instâncias, não vantagem real de uma config.")
     fig.tight_layout()
     fig.savefig(img_dir / "curva_pr_producao.png", dpi=150, bbox_inches="tight", facecolor="white")
     print(f"-> {img_dir / 'curva_pr_producao.png'}")
