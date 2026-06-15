@@ -10,7 +10,7 @@ Tria ~12 mil cartas de Pokémon TCG por Pokémon de **olhos fechados** — um pr
 
 ## Resumo
 
-Uma coleção temática — cartas de Pokémon TCG em que o Pokémon está dormindo — esbarra num gargalo: garimpar à mão ~12 mil cartas atrás das poucas que servem é inviável. Este projeto resolve isso com visão computacional: um modelo rankeia todas as cartas por probabilidade de **olhos fechados** (o proxy operacional de "dormindo") e devolve uma **lista de compras priorizada**, para uma pessoa confirmar no fim — humano-no-loop.
+Começar uma coleção temática — cartas de Pokémon TCG em que o Pokémon está dormindo — esbarra num gargalo: garimpar à mão ~12 mil cartas atrás das poucas que servem é inviável. Este projeto resolve isso com visão computacional: um modelo rankeia todas as cartas por probabilidade de **olhos fechados** (o proxy operacional de "dormindo") e devolve uma **lista de compras priorizada**, para uma pessoa confirmar no fim — humano-no-loop.
 
 - **Precisão onde importa:** entre as candidatas que o modelo descobriu (não estavam rotuladas à mão), as **50 primeiras são 100% acertos**; as 300 primeiras, **~94%**.
 - **Trabalho economizado:** no conjunto de teste, as cartas mais bem rankeadas recuperam **todos os positivos revisando ~1/3 do total** — o resto pode ser ignorado com segurança.
@@ -23,13 +23,13 @@ Uma coleção temática — cartas de Pokémon TCG em que o Pokémon está dormi
 
 Minha companheira coleciona uma categoria muito específica de cartas de Pokémon TCG: aquelas em que o Pokémon aparece **dormindo**. O problema é de escala — o universo de cartas relevantes passa de **12 mil**, e garimpar uma a uma, à mão, atrás das poucas que servem é inviável.
 
-"Dormindo", porém, é um alvo difícil para um classificador de imagem. É um conceito de **cena**: o modelo teria que inferir um *estado* a partir de pose, ambiente, contexto e expressão somados — e ensinar (ou validar) isso num MVP custaria tempo e dados que não se justificam. Então tomei uma decisão de produto: trocar o alvo conceitual por um **proxy visual, local e objetivamente rotulável** — **olhos fechados**. Olho fechado é um detalhe na arte que um classificador captura bem, e correlaciona forte com "dormindo".
+"Dormindo", porém, é um alvo difícil para um classificador de imagem. É um conceito de **cena**: o modelo teria que inferir um *estado* a partir de pose, ambiente, contexto e expressão somados — e ensinar (ou validar) isso num MVP custaria tempo e dados que não se justificam. Então tomei uma decisão: trocar o alvo conceitual por um **proxy visual, local e objetivamente rotulável** — **olhos fechados**. Olho fechado é um detalhe na arte que um classificador captura bem, e correlaciona forte com "dormindo".
 
-O proxy não é perfeito — um Pokémon pode estar de olhos fechados acordado (rindo, piscando) ou dormindo de olhos abertos —, mas captura a grande maioria dos dorminhocos e troca um problema vago por um mensurável. É uma escolha permanente deste produto, não um atalho temporário.
+O proxy não é perfeito — um Pokémon pode estar de olhos fechados acordado (rindo, piscando) ou dormindo de olhos abertos —, mas captura a grande maioria dos dorminhocos e troca um problema vago por um mensurável.
 
 A solução é uma **ferramenta de curadoria, não um classificador autônomo**: o modelo rankeia as cartas por probabilidade de olhos fechados e uma pessoa confirma as candidatas do topo — **humano-no-loop**. Por isso a métrica que guia o projeto é o **recall** (não deixar positivos de fora pesa mais que um falso positivo ocasional, que o humano descarta na revisão).
 
-Escopo deste MVP: as **6 eras mais recentes** do TCG (Black & White em diante). As eras fundadoras, anteriores a Black & White, ficaram fora desta versão.
+Escopo deste MVP: as **6 eras mais recentes** do TCG (Black & White em diante). As eras iniciais, anteriores a Black & White, ficaram fora desta versão.
 
 ---
 
@@ -37,7 +37,7 @@ Escopo deste MVP: as **6 eras mais recentes** do TCG (Black & White em diante). 
 
 O produto final é uma **lista de compras**: as ~12 mil cartas do universo de inferência, ranqueadas por probabilidade de olhos fechados, com as já-conhecidas marcadas e as **candidatas novas** (o que o modelo descobriu sozinho) em destaque para revisão.
 
-**Na lista real (universo de inferência, ~12 mil cartas).** Validei à mão o topo do ranking: entre as candidatas que o modelo descobriu — cartas que *não* estavam no conjunto rotulado —, as **50 primeiras são todas acertos** (100%) e as **300 primeiras, ~94%**. A qualidade decai como ladeira suave: os poucos erros se concentram mais embaixo, onde o score já caiu e a revisão humana opera em modo cético — o lugar certo para errar numa ferramenta com humano-no-loop.
+**Na lista real (universo de inferência, ~12 mil cartas).** Validei à mão o topo do ranking: entre as candidatas que o modelo descobriu — cartas que *não* estavam no conjunto rotulado —, as **50 primeiras são todas acertos** (100%) e as **300 primeiras, ~94%**. A qualidade decai em uma ladeira suave: os poucos erros se concentram mais embaixo, onde o score já caiu e a revisão humana opera com mais cuidado — o lugar certo para errar numa ferramenta com humano-no-loop.
 
 **Generalização (treino → inferência).** O modelo foi treinado em 5 eras (~5.800 cartas) e aplicado a 6 (~12 mil). Ou seja, encontrou cartas válidas entre **~6.400 cartas que nunca viu no treino**, incluindo uma **era inteira (Mega) ausente do conjunto de treino** — evidência de que aprendeu o traço "olho fechado", não decorou as cartas conhecidas.
 
@@ -55,7 +55,7 @@ O sistema é um classificador de imagem por **transfer learning**, com quatro co
 
 **2. Fine-tuning cirúrgico.** Em vez de treinar a rede inteira (caro, e com poucos positivos rotulados levaria a *overfitting*), congelo quase tudo e descongelo só os **2 últimos blocos** do backbone + uma cabeça de classificação binária. Capacidade suficiente para a rede reorganizar a representação em torno de "olho fechado", sem memorizar os exemplos de treino.
 
-**3. Recorte adaptativo da arte — o componente que faz o sistema funcionar.** Antes de ir ao modelo, cada carta é **recortada para mostrar só a arte**, descartando moldura, nome, HP, texto de ataques e história. O motivo: a imagem é redimensionada para 224×224 antes de entrar na rede, e nesse encolhimento um olho fechado de ~1-2% da carta simplesmente **desaparece**. Recortar concentra os pixels no que importa. A janela de corte é **adaptativa por raridade** — ajusta-se ao tipo de carta —, definida por uma fonte única de regras, idêntica no treino e na inferência.
+**3. Recorte adaptativo da arte — o componente que faz o sistema funcionar.** Antes de ir ao modelo, cada carta é **recortada para mostrar só a arte**, descartando moldura, nome, HP, história, texto de ataques e habilidades. O motivo: a imagem é redimensionada para 224×224 antes de entrar na rede, e nesse encolhimento um olho fechado de ~1-2% da carta simplesmente **desaparece**. Recortar concentra os pixels no que importa. A janela de corte é **adaptativa por raridade** — ajusta-se ao tipo de carta —, definida por uma fonte única de regras, idêntica no treino e na inferência.
 
 ![Antes e depois do recorte](docs/img/antes_depois_recorte.png)
 
@@ -65,7 +65,7 @@ Treino desbalanceado por natureza (~5% de positivos): o modelo é otimizado com 
 
 ---
 
-## A jornada: o gargalo não era o que eu pensava
+## A jornada: o gargalo não era o esperado
 
 A versão final parece óbvia em retrospecto, mas o caminho até ela foi um diagnóstico — e a lição mais valiosa do projeto está em *onde o gargalo realmente estava*.
 
