@@ -45,7 +45,6 @@ Todas as cartas e imagens vêm da **TCGdex** (`api.tcgdex.net`), API pública e 
 O alvo é "olho **visivelmente fechado** de um **Pokémon**". As regras, refinadas à luz da evidência ao longo do projeto:
 
 - Olho canonicamente fechado conta; olho **coberto** por pelo ou sombra **não** conta (não-visível ≠ fechado).
-- Olho de **humano** não conta — tem que ser Pokémon.
 - Pose de dormir **sem** olho fechado visível não conta; piscar (um olho aberto) não conta.
 - Múltiplos Pokémon na arte: conta se **ao menos um** tem ambos os olhos fechados.
 - Olho cerrado/sorrindo/apertado (`^^`, expressão de esforço) **conta** — a pálpebra está unida.
@@ -55,7 +54,7 @@ A distinção entre **expressão** (momentânea, conta) e **design fixo** (não 
 
 ### Dois universos de dados
 
-O projeto separa propositadamente dois conjuntos — confundi-los causou um bug real (ver Exp. 16):
+O projeto trabalha com dois conjuntos — confundi-los causou um bug real (ver Exp. 16):
 
 - **Universo de desenvolvimento** — 5.836 cartas, 38 sets, 5 eras (Black & White até Scarlet & Violet), com **311 positivos** rotulados à mão. Onde o modelo treina, valida e é testado.
 - **Universo de inferência** — 12.249 cartas, 6 eras (as 5 acima + Mega), onde o modelo é aplicado para gerar a lista de compras.
@@ -88,7 +87,7 @@ Esta fase usa embeddings de modelos pré-treinados *sem* ajustar seus pesos, sob
 - **Hipótese:** o CLIP (modelo visão-linguagem pré-treinado) saberia comparar cada carta com as frases "olhos fechados" vs "olhos abertos" sem treino.
 - **Setup:** CLIP ViT-B-32, scoring por similaridade imagem-texto. Dois pares de prompts testados ("olhos fechados" e "dormindo").
 - **Resultado:** para capturar todos os positivos seria preciso revisar ~99% do catálogo. "Dormindo" superou levemente "olhos fechados", mas ambos fracos.
-- **Diagnóstico:** o CLIP acerta os "dorminhocos famosos" (Snorlax, etc.) porque associa o personagem ao sono, não porque enxerga o olho. Em Pokémon sem essa associação cultural, erra. O sinal "olhos fechados" não é acessível por comparação direta com texto.
+- **Diagnóstico:** o CLIP acerta os "dorminhocos famosos" (Snorlax, etc.) provavelmente porque associa o personagem ao sono, não porque enxerga o olho. Em Pokémon sem essa associação cultural, erra. O sinal "olhos fechados" não é acessível por comparação direta com texto.
 - **Decisão:** abandonar zero-shot puro; testar um classificador treinado sobre os embeddings do CLIP.
 
 ### Experimento 2 — Embeddings do CLIP + Regressão Logística
@@ -126,7 +125,7 @@ Esta fase usa embeddings de modelos pré-treinados *sem* ajustar seus pesos, sob
 ### Experimento 6 — Mais dados (44 → 122 positivos) sobre SigLIP2
 
 - **Hipótese:** o diagnóstico de falta de dados (Exp. 3-4) indicava que mais positivos destravariam o desempenho. Combinado com a melhor representação do SigLIP2 (Exp. 5), as duas frentes deveriam se somar.
-- **Setup:** rotulagem manual de 7 sets novos (Scarlet & Violet, Twilight Masquerade, Surging Sparks, Evolving Skies, Brilliant Stars, Lost Origin, Crown Zenith), cobertura total por set. Base saltou de 44 para 122 positivos (2.611 cartas, prevalência ~4,7%). Distribuição de era equilibrada (64 SV / 45 SWSH, contra 3 SWSH antes). Mesma logística stratified 5-fold sobre embeddings SigLIP2.
+- **Setup:** rotulagem manual de 7 sets novos (Scarlet & Violet Base Set, Twilight Masquerade, Surging Sparks, Evolving Skies, Brilliant Stars, Lost Origin, Crown Zenith), cobertura total por set. Base saltou de 44 para 122 positivos (2.611 cartas, prevalência ~4,7%). Distribuição de era equilibrada (64 SV / 45 SWSH, contra 3 SWSH antes). Mesma logística stratified 5-fold sobre embeddings SigLIP2.
 - **Resultado:** PR-AUC 0,273 → **0,291** (leve alta). Precision no topo subiu forte: top-20 de 55% → **70%**, top-44 de 32% → **48%**. Porém o recall na cauda continuou fraco (top-100 captura ~30% dos 122 positivos), e o "K para recall 100%" é de 1959/2611 (frágil a outliers — um único positivo difícil no fundo dispara a métrica).
 - **Diagnóstico:** mais dados ajudou, mas MENOS que o esperado. O ganho concentrou-se na precisão do topo (o modelo confia mais e erra menos nos casos que já acertava), não na cauda de positivos difíceis. Hipótese: a logística sobre embeddings CONGELADOS está perto do teto — o sinal "olhos fechados" em arte muito estilizada pode não ser linearmente separável no embedding, e mais exemplos não ensinam o que a representação não capta. Importante: a comparação direta de recall/K com experimentos anteriores é enganosa, pois o número de positivos e o tamanho do catálogo mudaram.
 - **Decisão:** testar fine-tuning sobre o SigLIP2. As duas condições que faltaram no fine-tuning anterior (Exp. 3-4, que overfittou) estão agora presentes: dados suficientes (98 positivos no treino vs. 30) e uma representação melhor. Se a logística sobre embeddings congelados está no teto, ajustar os pesos do backbone é o caminho para capturar a cauda difícil.
