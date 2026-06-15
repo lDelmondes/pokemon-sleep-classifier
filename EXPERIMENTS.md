@@ -198,7 +198,7 @@ A virada do projeto. Uma auditoria mostrou o modelo errando olhos fechados óbvi
 
 ### Experimento 13 — Recorte da arte (resolução como gargalo) — subconjunto Common/Uncommon/Rare
 
-- **Motivação:** auditoria (Exp. anteriores) mostrou que o modelo erra olhos fechados ÓBVIOS (Klefki `^^` com prob 0.008). Hipótese: o gargalo não é dado nem capacidade, é RESOLUÇÃO — o olho (~1-2% da carta) some quando a carta inteira é espremida em 224×224.
+- **Motivação:** auditoria (Exp. anteriores) mostrou que o modelo erra olhos fechados ÓBVIOS (Klefki sm6-89 com prob 0.008). Hipótese: o gargalo não é dado nem capacidade, é RESOLUÇÃO — o olho (~1-2% da carta) some quando a carta inteira é espremida em 224×224.
 - **Método:** isolar a variável "recorte". Filtrou-se o catálogo para raridades de layout NORMAL (Common/Uncommon/Rare, onde a arte fica sempre na metade superior) → 4.022 cartas, 237 positivos. Mediu-se baseline (sem recorte) e depois recorte conservador (manter 55% superiores da carta), 3 rodadas cada.
 - **Resultado:**
   - Baseline (sem recorte): PR-AUC 0.507 / 0.566 / 0.559 → média ~0.544.
@@ -260,7 +260,7 @@ A virada do projeto. Uma auditoria mostrou o modelo errando olhos fechados óbvi
 
 ### A pergunta foi respondida
 
-Era possível, com transfer learning sobre um backbone de visão e um conjunto pequeno de rótulos manuais, construir um rankeador que triasse ~12 mil cartas com recall alto o suficiente para servir como ferramenta de curadoria com humano no loop? **Sim.** O modelo final generaliza para 6 eras (uma delas, Mega, nunca vista no treino) e produz uma lista cujas candidatas de topo têm 100% de precisão (top 50) e ~94% (top 300), com a qualidade decaindo suavemente — o comportamento ideal para revisão humana.
+Era possível, com transfer learning sobre um backbone de visão e um conjunto pequeno de rótulos manuais, construir um rankeador que triasse ~12 mil cartas com recall alto o suficiente para servir como ferramenta de curadoria com humano no loop? **Sim.** O modelo final generaliza para 6 eras (uma delas, Mega, nunca vista no treino) e produz uma lista cujas candidatas de topo têm 100% de precisão (top 50) e ~94% (top 300), com a qualidade decaindo suavemente, o comportamento ideal para revisão humana.
 
 ### A lição central
 
